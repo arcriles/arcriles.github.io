@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcriles - Your Regular Programmer</title>
+    <meta name="description" content="Arcriles">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rethink+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="is-loading">
+
+    <div id="blob"></div>
+    <div id="blur"></div>
+
+    <div id="mouse-glow"></div>
+
+    <div id="blackhole-container"></div>
+
+    <div id="theme-bubble" class="ascii-bubble"></div>
+
+    <div class="frame-corner corner-tl"></div>
+    <div class="frame-corner corner-tr"></div>
+    <div class="frame-corner corner-bl"></div>
+    <div class="frame-corner corner-br"></div>
+
+    <div class="frame-container frame-top ui-text">
+        <div class="top-left-identity">
+            <span class="logo-dot"></span>
+            <span class="mono-accent">AW // ARCRILES</span>
+        </div>
+        <div class="top-right-controls">
+            <button id="btn-theme" class="frame-btn" title="Toggle Theme"><i class="fi fi-rr-bulb"></i></button>
+            <button id="btn-fullscreen" class="frame-btn" title="Fullscreen"><i class="fi fi-rr-expand"></i></button>
+            <button id="btn-hide-frame" class="frame-btn" title="Hide UI"><i class="fi fi-rr-eye-crossed"></i></button>
+        </div>
+    </div>
+
+    <div class="frame-container frame-left ui-text" id="frame-left" title="View Skills">
+        <div class="side-label-vertical">
+            <span class="mono-accent lenny">( ͡° ͜ʖ ͡°)</span> // My Capabilities
+        </div>
+        <div class="skills-container">
+            <div class="skills-header"><h3>SKILLS</h3><button class="close-skills" id="close-skills-btn" title="Close">✕</button></div>
+            <ul class="skills-list" id="skills-list-dom"></ul>
+        </div>
+    </div>
+
+    <div class="frame-container frame-right">
+        <nav style="display:flex; flex-direction:column; gap:30px; width:100%;">
+            <a href="#about" class="nav-icon-item active" title="Home"><i class="fi fi-rr-home"></i></a>
+            <a href="#projects" class="nav-icon-item" title="Projects"><i class="fi fi-rr-folder"></i></a>
+            <button id="nav-btn-contact" class="nav-icon-item frame-btn" title="Contact"><i class="fi fi-rr-envelope"></i></button>
+        </nav>
+    </div>
+
+    <div class="frame-container frame-bottom ui-text" id="frame-bottom" title="Open Footer">
+        <div class="clock-container" id="mini-clock">
+            <i class="fi fi-rr-clock mono-accent"></i><span id="sys-time">--:--</span>
+        </div>
+        
+        <div class="footer-content">
+            <div class="footer-left">
+                <h2>Let's <span class="mono-accent">Connect</span></h2>
+                <p class="footer-desc">A simple Conversation is all you needed</p>
+                <a href="mailto:arcrilest@outlook.com" class="footer-email" title="Send Email">arcrilest@outlook.com<i class="fi fi-rr-arrow-right"></i></a>
+            </div>
+            <div class="footer-right">
+                <span class="footer-label">ELSEWHERE</span>
+                <div class="social-grid">
+                    <a href="https://github.com/arcriles" class="social-card" title="Github Profile">
+                        <span class="card-title">GitHub</span>
+                        <span class="card-handle">@arcriles</span>
+                    </a>
+                    <a href="https://linktr.ee/Arcriles" class="social-card" title="linktree">
+                        <span class="card-title">Check my</span>
+                        <span class="card-handle">/CV</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/arcriles/" class="social-card" title="LinkedIn Profile">
+                        <span class="card-title">LinkedIn</span>
+                        <span class="card-handle">@arcriles</span>
+                    </a>
+                </div>
+            </div>
+            <button id="btn-scroll-top" title="Scroll to Top"><i class="fi fi-rr-arrow-up"></i></button>
+        </div>
+    </div>
+    
+    <button id="btn-restore-frame" title="Restore UI"><i class="fi fi-rr-eye"></i></button>
+
+    <main id="main-content-wrapper">
+        <section class="hero" id="about">
+            <div class="centerHover" id="bh-trigger" title="Toggle About Section">
+                <h1 data-value="Arcriles">Arcriles</h1>
+                <span class="click-hint">[ Who_am_I? ]</span>
+            </div>
+        </section>
+
+        <section id="about-drawer">
+            <div class="about-inner-wrapper">
+                <div class="about-grid-layout">
+                    <div class="about-col slide-reveal">
+                        <p class="ui-text mb-2">Whoami</p>
+                        <h2 class="about-heading">A bit about me</h2>
+                        <div class="bio-text">
+                            <p>I consider myself a versatile developer. While I have many interests, my focus is locked on Cybersecurity. Navigating a wide range of projects has pushed my confidence high. High enough to make you ask</p>
+                            <p><b class="mono-accent">Who is this guy?</b></p>
+                            <p>My approach is rooted in simplicity. I believe the best interfaces are the ones that get out of the way and let users accomplish their goals effortlessly.</p>
+                        </div>
+                        
+                        </div>
+                    
+                    <div class="about-col slide-reveal">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <p class="stat-num">5+</p>
+                                <p class="stat-label">Years Experience</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-num" id="stat-project-count">10+</p>
+                                <p class="stat-label">Projects Completed</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-num">8</p>
+                                <p class="stat-label">Happy Clients</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-num">∞</p>
+                                <p class="stat-label">Cups of Coffee</p>
+                            </div>
+                        </div>
+                        
+                        <div class="experience-list">
+                            <h3 class="ui-text mb-6">Experience</h3>
+                            
+                            <div class="job-item">
+                                <div class="job-header">
+                                    <h4 class="job-role">Developer</h4>
+                                    <span class="job-date">2024 — Now</span>
+                                </div>
+                                <p class="job-company">Sinarmas Agribusiness and Food</p>
+                            </div>
+                            
+                            <div class="job-item">
+                                <div class="job-header">
+                                    <h4 class="job-role">Pentester</h4>
+                                    <span class="job-date">2020 — 2024</span>
+                                </div>
+                                <p class="job-company">Independent Contractor</p>
+                            </div>
+                            
+                            <div class="job-item">
+                                <div class="job-header">
+                                    <h4 class="job-role">Bug Hunting</h4>
+                                    <span class="job-date">2019 — 2020</span>
+                                </div>
+                                <p class="job-company">Bug Bounty Program</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="close-drawer" onclick="toggleAbout()" title="Close Section">Close Section ▲</button>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2>Selected Projects</h2>
+            <div class="accordion" id="projects-container"></div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
