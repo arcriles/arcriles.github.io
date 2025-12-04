@@ -14,7 +14,7 @@
       "team": [
         { "label": "Developer", "value": "Arcriles" }
       ],
-      "link": "Github",
+      "link": "https://github.com/arcriles/Netcut",
       "tech": "C++17, Linux Raw Sockets, Multithreading",
       "desc": [
         "A comprehensive command-line tool built in C++ for network security testing. It utilizes raw sockets to perform active network scanning, LAN isolation, and Man-in-the-Middle (MITM) attacks via ARP spoofing. Designed for Linux environments, it features a text-based user interface (TUI) suitable for headless setups and includes automated recovery mechanisms to restore network connectivity after testing."
@@ -34,7 +34,7 @@
         { "label": "Front End Developer", "value": "Arcriles, JLY" },
         { "label": "Back End Developer", "value": "AIH" }
       ],
-      "link": "Github",
+      "link": "Confidential",
       "tech": "React, OpenAI, Whisper, D-ID",
       "desc": [
         "SMOPC - EVA Data Assistant is an AI-powered multimodal assistant platform that delivers interactive data experiences using voice, text, and image inputs."
@@ -51,7 +51,7 @@
       "team": [
         { "label": "Developer", "value": "Arcriles" }
       ],
-      "link": "Github",
+      "link": "https://github.com/arcriles/install-wordlist",
       "tech": "Bash, Linux, Git",
       "desc": [
         "Script automatically downloads & installs popular wordlists (SecLists, FuzzDB, Assetnote, etc.) for pentesting. Designed for Kali Linux environments to streamline security auditing."      ]
@@ -70,7 +70,7 @@
         { "label": "Front End Engineer", "value": "Arcriles, H" },
         { "label": "Back End Engineer", "value": "Arcriles, H" }
       ],
-      "link": "Github",
+      "link": "https://github.com/arcriles/blockchain_website",
       "tech": "Solidity, React, Ethereum",
       "desc": [
         "Step into the innovative world of Noveau.com, a unique website that functions similarly to Patreon. This platform serves as a virtual hub where creators can share their talents, ideas, and projects, while supporters have the opportunity to engage directly."
@@ -91,7 +91,7 @@
         { "label": "UI Designer", "value": "FJSL" },
         { "label": "Audio Engineer", "value": "JAN" }
       ],
-      "link": "itch.io",
+      "link": "https://arcriles.itch.io/idle-slayer",
       "tech": "Unity 2020",
       "desc": [
         "Medieval themed game, Idle Slayer is a third-person idle game that has a time setting and Medieval world. Players are required to fight monsters with weapons and stats owned. The visual styles displayed by this game include 3D for character and environment sections while 2D based for interface sections with a flat theme. Idle Slayer targets players or audiences from children to teenagers and has references from several games that are almost similar, namely: Tap Titans and Ragnarok Mobile Idle Poring."
@@ -111,7 +111,7 @@
         { "label": "Deep Learning Engineer", "value": "Arcriles, FJSL" },
         { "label": "Software Developer", "value": "FAB, KHJ" }
       ],
-      "link": "Github",
+      "link": "https://github.com/arcriles/TugasAkhirAI",
       "tech": "MobileNetV2, OpenCV, Python",
       "desc": [
         "Face Mask Detection Project is a good solution to control an area when people are required to wear a mask. With COVID-19 Pandemic that happened for almost a year, there are a lot of people that are travelling without wearing a mask. Therefore, the face mask detection project can help detect and prevent people from spreading the Covid-19 virus by disallowing people that don’t wear masks when entering a place and urging them to wear a mask. The base of this program uses Deep learning Algorithm that uses a Camera for detecting mask usage. This program is using OpenCV: Multi task Cascaded Convolutional Network method that is open sourced and ideal for face detecting and also using OpenCV MobileNet V2 to connect data and camera from mobile phone ."
@@ -132,7 +132,7 @@
         { "label": "UI Developer", "value": "JAN, MA" },
         { "label": "Project Manager", "value": "IFB" }
       ],
-      "link": "Github",
+      "link": "https://github.com/arcriles/JoPhoto",
       "tech": "Android, Java/Kotlin",
       "desc": [
         "Underlying the Jophoto app project is a robust framework that ensures smooth performance and efficient photo retrieval. The development incorporates modern technologies to optimize the app's responsiveness, offering users a fluid and engaging experience. The project's architecture is carefully crafted to balance simplicity with functionality, emphasizing the core goal of providing users with a visually enriching and hassle-free photo viewing experience on their mobile devices."
@@ -150,7 +150,7 @@
       "team": [
         { "label": "Student", "value": "Arcriles" }
       ],
-      "link": "Udemy",
+      "link": "https://github.com/arcriles/My-cert",
       "tech": "Network Security, Cryptography",
       "desc": [
         "Cybersecurity is about safeguarding critical systems and sensitive information from digital threats. In a cybersecurity study, one delves into various aspects such as security engineering, network security, application security, cloud security, cryptography, and understanding cyberattacks. The purpose of this study is to equip individuals and organizations with the skills and knowledge needed to prevent, detect, and respond to cyberthreats effectively. It's a practical approach to addressing the real-world challenges posed by the ever-evolving landscape of digital security."
@@ -168,7 +168,7 @@
         { "label": "Front End Developer", "value": "Arcriles, A" },
         { "label": "Back End Developer", "value": "Y, ND" }
       ],
-      "link": "Github",
+      "link": "https://github.com/arcriles/UAS_PEMWEB_LEC_Finale",
       "tech": "CodeIgniter, MySQL, PHP",
       "desc": [
         "Dive into a gaming haven with Game Rental Hub, where the thrill of renting game consoles from the comfort of your home is just a click away. This user-centric website employs CRUD functionality, allowing easy navigation for users who can log in as customers or administrators. Admins hold the reins, swiftly managing orders by approving or canceling requests, ensuring a seamless gaming rental experience."
@@ -186,7 +186,7 @@
         { "label": "Front End Developer", "value": "Arcriles, A" },
         { "label": "Back End Developer", "value": "Y, ND" }
       ],
-      "link": "Github",
+      "link": "https://github.com/arcriles/UAS_PEMWEB_LEC_Finale",
       "tech": "Laravel, PHP, MySQL",
       "desc": [
         "Powered by Laravel, our website seamlessly integrates CRUD functionality, offering users a straightforward hotel booking experience. Customers can log in and easily browse a curated list of hotels, make reservations, and manage their bookings. Meanwhile, administrators have the capability to approve or cancel bookings, edit reservation dates, and access a comprehensive booking history for each hotel. The underlying Laravel framework ensures not only a secure user authentication system but also efficient CRUD operations for seamless hotel management."
@@ -207,7 +207,7 @@
         { "label": "Level Designer", "value": "Arcriles" },
         { "label": "UI Designer", "value": "H" }
       ],
-      "link": "itch.io",
+      "link": "https://umn.itch.io/stranded",
       "tech": "Unity 2020, Google VR",
       "desc": [
         "Mobile VR games that use cctv perspective view without leaving the VR focus that requires deep immersion. The use of the player's perspective as opposed to the main focus of VR makes uniqueness and proves that VR has no limits in development to create unique innovations. This game is developed by 2 person. using the Unity engine with limited assets. this game was created in 2 months, due to limitations in the Unity engine"
@@ -224,7 +224,7 @@
       "team": [
         { "label": "ML Engineer", "value": "Arcriles, AT, ND, DS" }
       ],
-      "link": "Github",
+      "link": "https://github.com/arcriles/My-cert/blob/main/ShopeeCodeLeague.pdf",
       "tech": "Python, Pandas, Sklearn",
       "desc": [
         "Embark on an exhilarating journey with the Shopee Code League Certification, featuring a series of captivating challenges that push the boundaries of AI and machine learning expertise. From the intense three-hour Order Brushing challenge, where participants detect fake orders aimed at inflating online store stats, to the dynamic Image Recognition in the Product Detection challenge, each task immerses you in real-world scenarios commonly faced in the e-commerce landscape. The program also includes a series of rapid-fire Short Algo Contests, providing participants with five algorithm questions in just three hours, ensuring a fast-paced and intellectually stimulating experience."
@@ -245,7 +245,7 @@
         { "label": "Data Analytics", "value": "Arcriles, AC, TJ" },
         { "label": "Front End Developer", "value": "BJS, MK" }
       ],
-      "link": "Github",
+      "link": "https://github.com/arcriles/Cobol-UAS-Sukses",
       "tech": "REST API, Python",
       "desc": [
         "Introducing CovidWHO API, a streamlined platform providing instant access to real-time COVID data directly from the World Health Organization (WHO). Tailored for efficiency and accuracy, this website serves as a reliable hub for users seeking up-to-date information on global COVID rates. With a user-friendly interface, CovidWHO API ensures that accessing critical pandemic data is both effortless and reliable."
