@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcriles - The IT Specialist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --border: #222222;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --hover-border: #444444;
+            --accent-color: #ffffff; /* Monochrome White Accent */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 3D Background */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animations */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* About Section */
+        #about {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem 0;
+        }
+
+        .about-wrapper {
+            display: grid;
+            /* Experience column (right) is significantly wider */
+            grid-template-columns: 0.7fr 1.3fr; 
+            gap: 5rem;
+            align-items: flex-start;
+        }
+
+        .identity-col h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .identity-col .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            max-width: 450px;
+        }
+
+        .bio-text {
+            color: #ccc;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--text-main);
+            color: var(--bg-color);
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid var(--text-main);
+            transition: all 0.3s ease;
+            margin-top: 2.5rem;
+        }
+
+        .cta-btn:hover {
+            background: transparent;
+            color: var(--text-main);
+            transform: translateY(-2px);
+        }
+
+        /* Timeline */
+        .timeline-container {
+            background: rgba(20, 20, 20, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 4px;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .timeline-container:hover {
+            transform: translateY(-5px);
+            border-color: var(--hover-border);
+        }
+
+        .timeline-header {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .timeline-item {
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+            border-left: 1px solid var(--border);
+            position: relative;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3px;
+            top: 8px;
+            width: 5px;
+            height: 5px;
+            background: var(--text-main);
+            border-radius: 50%;
+        }
+
+        .role {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: #fff;
+        }
+
+        .company {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .brief {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .duration {
+            font-size: 0.8rem;
+            color: #555;
+            display: block;
+        }
+
+        /* Projects - Accordion Style */
+        #projects {
+            padding: 8rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-head {
+            margin-bottom: 3rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+
+        .accordion {
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid var(--border);
+        }
+
+        .acc-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* HEADER STYLING */
+        .acc-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 1rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.3s;
+        }
+
+        .acc-header:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .acc-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Small Thumbnail in Header */
+        .acc-header-thumb {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #333;
+            background: #111;
+        }
+
+        .acc-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--text-main);
+            transition: color 0.3s;
+        }
+
+        .acc-meta {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .acc-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* Active State (Monochrome) */
+        .acc-item.active .acc-title {
+            color: var(--accent-color);
+        }
+
+        .acc-item.active .acc-icon {
+            transform: rotate(180deg);
+            color: var(--accent-color);
+        }
+
+        .acc-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+        }
+
+        .acc-inner {
+            padding: 1rem 1rem 3rem 1rem;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr; /* Image area slightly larger */
+            gap: 3rem;
+            align-items: start;
+        }
+
+        /* --- BENTO BOX GRID --- */
+        .bento-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .bento-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #333;
+            background: #111;
+            transition: transform 0.3s;
+        }
+
+        .bento-img:hover {
+            transform: scale(1.02);
+            border-color: #555;
+        }
+
+        /* First image acts as the 'Hero' of the bento box */
+        .bento-img:first-child {
+            grid-column: 1 / -1; /* Spans full width */
+            height: 350px; /* Taller */
+        }
+
+        /* If only 1 image exists, ensure it looks good */
+        .bento-box:only-child .bento-img {
+            height: 400px;
+        }
+
+        /* Details Side */
+        .acc-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding-top: 0.5rem;
+        }
+
+        .acc-subtitle {
+            font-size: 1.1rem;
+            color: #ccc;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .acc-desc {
+            color: #aaa;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .acc-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .acc-tag {
+            font-size: 0.75rem;
+            color: var(--accent-color);
+            border: 1px solid #555;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+        }
+
+        .acc-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent-color);
+            padding-bottom: 2px;
+            transition: opacity 0.3s;
+            width: fit-content;
+        }
+
+        .acc-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Contact */
+        #contact {
+            padding: 8rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .contact-content {
+            max-width: 600px;
+        }
+
+        .email-display {
+            font-size: 1.8rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: inline-block;
+            margin-top: 2rem;
+            border-bottom: 1px solid transparent;
+        }
+
+        .email-display:hover {
+            color: var(--text-main);
+            border-color: var(--text-main);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: #444;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media (max-width: 900px) {
+            .about-wrapper {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .acc-inner {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .acc-header-thumb {
+                width: 50px;
+                height: 50px;
+            }
+            .identity-col h1 {
+                font-size: 2.8rem;
+            }
+            #about {
+                padding-top: 6rem;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body>
+    <div id="canvas-container"></div>
+    <div class="container">
+        <section id="about" class="fade-in-section">
+            <div class="about-wrapper">
+                <div class="identity-col">
+                    <div style="font-size: 0.9rem; letter-spacing: 0.2em; color: var(--text-muted); margin-bottom: 1.5rem;">
+                        PROFILE
+                    </div>
+                    <h1>ARCRILES</h1>
+                    <p class="subtitle">Versatile Engineering. Secure Solutions.</p>
+                    <div class="bio-text">
+                        <p>
+                            I consider myself a versatile developer. While I have many interests, my focus is locked on
+                            <strong>Cybersecurity</strong>. Navigating a wide range of projects has pushed my confidence high.
+                        </p>
+                        <p>
+                            My approach is rooted in simplicity. I believe the best interfaces are the ones that get out of the way and let users accomplish their goals effortlessly.
+                        </p>
+                    </div>
+                    <a href="#contact" class="cta-btn">Contact Me</a>
+                </div>
+                <div class="timeline-container">
+                    <div class="timeline-header">Experience</div>
+                    <div class="timeline-item">
+                        <div class="role">Developer</div>
+                        <div class="company">Sinarmas Agribusiness and Food</div>
+                        <div class="brief">Full-stack development and system maintenance operations.</div>
+                        <span class="duration">2024 - Now</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="role">Pentester</div>
+                        <div class="company">Independent Contractor</div>
+                        <div class="brief">Conducting vulnerability assessments and security auditing.</div>
+                        <span class="duration">2020 - 2024</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="role">Bug Hunting</div>
+                        <div class="company">Bug Bounty Program</div>
+                        <div class="brief">Identifying critical vulnerabilities in public programs.</div>
+                        <span class="duration">2019 - 2020</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="role">Certification</div>
+                        <div class="company">Red & Blue Team Strategy</div>
+                        <div class="brief">Continuous learning in offensive and defensive security strategies.</div>
+                        <span class="duration">2021 & 2025</span>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: auto; padding-top: 3rem; display: flex; gap: 2rem; font-size: 0.9rem; color: var(--text-muted);">
+                <a href="#projects" style="color: inherit; text-decoration: none; transition: color 0.3s;">SELECTED PROJECTS &darr;</a>
+            </div>
+        </section>
+
+        <section id="projects" class="fade-in-section">
+            <div class="section-head">
+                <div class="section-label">Selected Work</div>
+                <h2 class="section-title">Technical Execution</h2>
+            </div>
+            
+            <div class="accordion" id="projects-container">
+                <div style="padding: 2rem; color: #666; text-align: center;">Loading projects...</div>
+            </div>
+        </section>
+
+        <section id="contact" class="fade-in-section">
+            <div class="section-head">
+                <div class="section-label">Contact</div>
+                <h2 class="section-title">Let's Connect</h2>
+            </div>
+            <div class="contact-content">
+                <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                    A simple Conversation is all you needed. I am open to discussing security auditing, development, and new opportunities.
+                </p>
+                <a href="mailto:arcrilest@outlook.com" class="email-display">arcrilest@outlook.com</a>
+            </div>
+        </section>
+
+        <footer>
+            <div>&copy; 2025 Arcriles.</div>
+            <div>All Rights Reserved.</div>
+        </footer>
+    </div>
+
+    <script>
+        // --- Three.js Terrain Wave ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x050505, 0.002);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 30; camera.position.y = 5;
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+        const geometry = new THREE.PlaneGeometry(100, 100, 40, 40);
+        const material = new THREE.MeshBasicMaterial({ color: 0x444444, wireframe: true, transparent: true, opacity: 0.3 });
+        const terrain = new THREE.Mesh(geometry, material);
+        terrain.rotation.x = -Math.PI / 2;
+        scene.add(terrain);
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 300;
+        const posArray = new Float32Array(particlesCount * 3);
+        for (let i = 0; i < particlesCount * 3; i++) { posArray[i] = (Math.random() - 0.5) * 60; }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({ size: 0.15, color: 0xffffff, transparent: true, opacity: 0.5 });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        const clock = new THREE.Clock();
+        function animate() {
+            const elapsedTime = clock.getElapsedTime();
+            const positionAttribute = geometry.attributes.position;
+            const positions = positionAttribute.array;
+            for (let i = 0; i < positionAttribute.count; i++) {
+                const x = positions[i * 3]; const y = positions[i * 3 + 1];
+                positions[i * 3 + 2] = Math.sin(x * 0.2 + elapsedTime * 0.5) * 2 + Math.sin(y * 0.2 + elapsedTime * 0.5) * 2;
+            }
+            positionAttribute.needsUpdate = true;
+            particlesMesh.rotation.y = elapsedTime * 0.05;
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+        animate();
+        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+
+        // --- FETCH & ACCORDION RENDER ---
+        async function loadProjects() {
+            try {
+                const response = await fetch('projects.json');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                renderAccordion(data.projects);
+            } catch (error) {
+                console.error("Fetch error:", error);
+                document.getElementById('projects-container').innerHTML = 
+                    `<div style="text-align:center; color:#fff; padding:2rem;">
+                        Error loading data. Run on a local server.
+                    </div>`;
+            }
+        }
+
+        function renderAccordion(projects) {
+            const container = document.getElementById('projects-container');
+            container.innerHTML = '';
+
+            projects.forEach((p) => {
+                const firstImage = (p.images && p.images.length > 0) ? p.images[0] : '';
+                const techArray = p.tech ? p.tech.split(', ') : [];
+                const description = p.desc ? p.desc.join(' ') : '';
+                
+                // Construct Bento Box Images HTML
+                let imagesHtml = '';
+                if (p.images && p.images.length > 0) {
+                    imagesHtml = `<div class="bento-box">
+                        ${p.images.map(src => `<img src="${src}" class="bento-img" loading="lazy" alt="${p.title}">`).join('')}
+                    </div>`;
+                } else {
+                    imagesHtml = '<div style="height:350px; background:#111; border:1px solid #333;"></div>';
+                }
+
+                const item = document.createElement('div');
+                item.className = 'acc-item';
+                
+                item.innerHTML = `
+                    <button class="acc-header" onclick="toggleAccordion(this)">
+                        <div class="acc-left">
+                            ${firstImage ? `<img src="${firstImage}" alt="${p.title}" class="acc-header-thumb">` : ''}
+                            <span class="acc-title">${p.title}</span>
+                        </div>
+                        <div class="acc-meta">
+                            <span>${p.year}</span>
+                            <span class="acc-icon">&darr;</span>
+                        </div>
+                    </button>
+                    <div class="acc-content">
+                        <div class="acc-inner">
+                            ${imagesHtml}
+                            
+                            <div class="acc-details">
+                                <h3 class="acc-subtitle">${p.subtitle}</h3>
+                                <p class="acc-desc">${description}</p>
+                                
+                                <div class="acc-tags">
+                                    ${techArray.map(t => `<span class="acc-tag">${t}</span>`).join('')}
+                                </div>
+
+                                ${p.link !== "Confidential" 
+                                    ? `<a href="${p.link}" target="_blank" class="acc-link">View Project &rarr;</a>` 
+                                    : `<span style="color:#555; margin-top:1rem; display:inline-block;">Confidential</span>`}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const content = item.querySelector('.acc-content');
+            const isActive = item.classList.contains('active');
+
+            if (!isActive) {
+                item.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + "px";
+            } else {
+                item.classList.remove('active');
+                content.style.maxHeight = null;
+            }
+        }
+
+        loadProjects();
+
+        // Scroll Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('is-visible');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in-section').forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>
