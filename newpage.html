@@ -8,7 +8,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
     <style>
@@ -70,7 +70,6 @@
             z-index: 1;
         }
 
-        /* --- UPDATED: Transition duration increased from 0.8s to 1.6s for 0.5x speed --- */
         .scroll-reveal {
             opacity: 0;
             transform: translateY(40px);
@@ -432,54 +431,193 @@
             color: var(--text-main);
         }
 
-        @keyframes panDots {
-            from {
-                background-position: 0 0;
-            }
-
-            to {
-                background-position: 0 -20px;
-            }
-        }
-
-        .contact-visual {
+/* video player */
+        .video-container {
             width: 100%;
-            min-height: 350px;
-            background-color: #050505;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-main);
+            aspect-ratio: 16 / 9;
+            background-color: #000;
             position: relative;
             overflow: hidden;
-            background-image: radial-gradient(rgba(180, 180, 180, 0.4) 1px, transparent 1px);
-            background-size: 20px 20px;
-            animation: panDots 2s linear infinite;
-        }
-
-        .contact-slideshow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: var(--font-main);
+
+            clip-path: polygon(
+                0 0, 
+                calc(100% - 20px) 0, 
+                100% 20px, 
+                100% 100%, 
+                20px 100%, 
+                0 calc(100% - 20px)
+            );
+            border: 4px solid #333; /* Bulky border look */
         }
 
-        .contact-img {
+        /* Diagonal Hash "Caution Tape" Accent (Grayscale) */
+        .video-container::before {
+            content: "";
             position: absolute;
-            max-width: 80%;
-            max-height: 80%;
-            object-fit: contain;
-            opacity: 0;
-            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-            transform: scale(0.95);
+            top: 0; left: 0; width: 100px; height: 100px;
+            background: repeating-linear-gradient(
+                -45deg,
+                #111,
+                #111 5px,
+                #222 5px,
+                #222 10px
+            );
+            z-index: 1;
+            clip-path: polygon(0 0, 100% 0, 0 100%);
+            opacity: 0.5;
         }
 
-        .contact-img.active {
+        .contact-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            z-index: 2;
+        }
+
+        .big-play-btn {
+            position: absolute;
+            background: #fff;
+            color: #000;
+            /* Boxy shape with opposite cut corners */
+            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+            width: 70px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            font-family: var(--font-main);
+            font-size: 1.5rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.15s;
+            z-index: 10;
+        }
+
+        .big-play-btn::before {
+            content: "";
+            position: absolute;
+            inset: 2px;
+            background: #fff;
+            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+            z-index: -1;
+        }
+
+        .big-play-btn:hover {
+            transform: scale(1.1) skewX(-5deg);
+            background: #ccc;
+        }
+
+        .big-play-btn.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.5);
+        }
+
+        .custom-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: calc(100% - 40px);
+            padding: 0.75rem 1rem;
+            background: rgba(10, 10, 10, 0.85);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 5;
+            backdrop-filter: blur(8px);
+            /* Floated, chamfered bottom bar */
+            clip-path: polygon(
+                0 0, 
+                100% 0, 
+                100% calc(100% - 10px), 
+                calc(100% - 10px) 100%, 
+                0 100%
+            );
+            border-left: 4px solid #555;
+        }
+
+        .video-container:hover .custom-controls.active {
             opacity: 1;
-            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        /* Micro text labels */
+        .ctrl-label {
+            font-size: 0.5rem;
+            color: #555;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-right: auto;
+            align-self: flex-start;
+            position: absolute;
+            top: 2px; left: 12px;
+        }
+
+        .ctrl-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            opacity: 0.7;
+            transition: opacity 0.2s, transform 0.1s;
+            margin-top: 8px; /* Offset from micro text */
+        }
+
+        .ctrl-btn:hover {
+            opacity: 1;
+            transform: skewX(-5deg);
+        }
+
+        .ctrl-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .ctrl-time {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fff;
+            min-width: 90px;
+            letter-spacing: 0.05em;
+            font-variant-numeric: tabular-nums; 
+            margin-top: 8px;
+        }
+
+        /* Sharp/Blocky Progress Slider */
+        .ctrl-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: #222;
+            outline: none;
+            cursor: pointer;
+            margin-top: 8px;
+            clip-path: polygon(0 0, 100% 0, calc(100% - 3px) 100%, 0 100%);
+        }
+
+        .ctrl-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 12px;
+            background: #fff;
+            cursor: pointer;
+            transform: skewX(-15deg);
         }
 
         footer {
@@ -582,6 +720,11 @@
             background-size: 20px 20px;
             animation: panDots 2s linear infinite;
             box-sizing: border-box;
+        }
+
+        @keyframes panDots {
+            from { background-position: 0 0; }
+            to { background-position: 0 -20px; }
         }
 
         .gallery-grid {
@@ -843,11 +986,31 @@
                     </div>
                 </div>
 
-                <div class="contact-visual scroll-reveal" style="--delay: 200ms;">
-                    <div class="contact-slideshow">
-                        <img src="assets/pic 1.png" class="contact-img active" alt="Pic 1">
-                        <img src="assets/pic 2.png" class="contact-img" alt="Pic 2">
-                        <img src="assets/pic 3.png" class="contact-img" alt="Pic 3">
+                <div class="video-container scroll-reveal" style="--delay: 200ms;" id="vid-container">
+                    <video id="contact-video" class="contact-video" preload="metadata" playsinline>
+                        <source src="assets/contact-terminal.mp4" type="video/mp4">
+                    </video>
+
+                    <button class="big-play-btn" id="big-play-btn">
+                        &gt;
+                    </button>
+
+                    <div class="custom-controls" id="custom-controls">
+                        <span class="ctrl-label"></span>
+                        
+                        <button class="ctrl-btn" id="play-pause-btn">
+                            <svg id="ctrl-play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <svg id="ctrl-pause-icon" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                        </button>
+                        
+                        <input type="range" class="ctrl-slider" id="progress-bar" value="0" min="0" max="100">
+                        
+                        <span class="ctrl-time" id="time-display">[ -:-- / -:-- ]</span>
+                        
+                        <button class="ctrl-btn" id="mute-btn">
+                            <svg id="vol-icon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                            <svg id="mute-icon" viewBox="0 0 24 24" style="display:none;"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -909,6 +1072,7 @@
     </div>
 
     <script>
+        // --- NAVIGATION & UTILS ---
         function smoothScrollTo(target, duration) {
             const targetEl = document.querySelector(target);
             if (!targetEl) return;
@@ -941,16 +1105,6 @@
 
         if (history.scrollRestoration) history.scrollRestoration = 'manual';
         window.onload = function () { setTimeout(() => window.scrollTo(0, 0), 10); };
-
-        const contactImages = document.querySelectorAll('.contact-img');
-        let currentSlide = 0;
-        if (contactImages.length > 0) {
-            setInterval(() => {
-                contactImages[currentSlide].classList.remove('active');
-                currentSlide = (currentSlide + 1) % contactImages.length;
-                contactImages[currentSlide].classList.add('active');
-            }, 3000);
-        }
 
         let projectsData = [];
         async function fetchProjects() {
@@ -1051,6 +1205,7 @@
         function openLightbox(src) { document.getElementById('lightbox-img').src = src; lightbox.classList.add('active'); }
         function closeLightbox() { lightbox.classList.remove('active'); }
 
+        // --- THREE.JS BACKGROUND ---
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0x050505, 0.002);
@@ -1107,6 +1262,83 @@
         }
 
         fetchProjects();
+
+        // --- CUSTOM VIDEO PLAYER LOGIC ---
+        const video = document.getElementById('contact-video');
+        const bigPlayBtn = document.getElementById('big-play-btn');
+        const customControls = document.getElementById('custom-controls');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const playIcon = document.getElementById('ctrl-play-icon');
+        const pauseIcon = document.getElementById('ctrl-pause-icon');
+        const progressBar = document.getElementById('progress-bar');
+        const timeDisplay = document.getElementById('time-display');
+        const muteBtn = document.getElementById('mute-btn');
+        const volIcon = document.getElementById('vol-icon');
+        const muteIcon = document.getElementById('mute-icon');
+
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+
+        function togglePlay() {
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        }
+
+        function toggleMute() {
+            video.muted = !video.muted;
+            if (video.muted) {
+                volIcon.style.display = 'none';
+                muteIcon.style.display = 'block';
+            } else {
+                volIcon.style.display = 'block';
+                muteIcon.style.display = 'none';
+            }
+        }
+
+        bigPlayBtn.addEventListener('click', togglePlay);
+        playPauseBtn.addEventListener('click', togglePlay);
+        muteBtn.addEventListener('click', toggleMute);
+
+        video.addEventListener('play', () => {
+            bigPlayBtn.classList.add('hidden');
+            customControls.classList.add('active');
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+        });
+
+        video.addEventListener('pause', () => {
+            bigPlayBtn.classList.remove('hidden');
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+        });
+
+        video.addEventListener('timeupdate', () => {
+            const progress = (video.currentTime / video.duration) * 100;
+            progressBar.value = progress;
+            timeDisplay.textContent = `[ ${formatTime(video.currentTime)} / ${formatTime(video.duration)} ]`;
+        });
+
+        video.addEventListener('loadedmetadata', () => {
+            timeDisplay.textContent = `[ 0:00 / ${formatTime(video.duration)} ]`;
+        });
+
+        progressBar.addEventListener('input', () => {
+            const newTime = (progressBar.value / 100) * video.duration;
+            video.currentTime = newTime;
+        });
+
+        video.addEventListener('ended', () => {
+            bigPlayBtn.classList.remove('hidden');
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+            progressBar.value = 0;
+        });
     </script>
 </body>
 
