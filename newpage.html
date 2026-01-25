@@ -48,6 +48,7 @@
             overflow-x: hidden;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            padding-bottom: 40px; 
         }
 
         #canvas-container {
@@ -167,12 +168,42 @@
             border-color: #fff;
         }
 
-        .identity-col h1 {
+        /* --- TITLE BASE & ANIMATION --- */
+        #main-title {
             font-size: 4.5rem;
             font-weight: 800;
             line-height: 1;
             margin: 0;
             letter-spacing: -0.03em;
+            position: relative;
+            transition: text-shadow 0.1s ease, transform 0.1s ease;
+            animation: minorGlitch 4s infinite linear;
+        }
+
+        @keyframes minorGlitch {
+            0%, 94%, 100% {
+                text-shadow: none;
+                transform: skewX(0deg) translate(0);
+            }
+            95% {
+                text-shadow: 2px 0 0 rgba(255, 255, 255, 0.4), -2px 0 0 rgba(100, 100, 100, 0.4);
+                transform: skewX(-5deg) translate(-1px, 0);
+            }
+            96% {
+                text-shadow: -2px 0 0 rgba(255, 255, 255, 0.4), 2px 0 0 rgba(100, 100, 100, 0.4);
+                transform: skewX(2deg) translate(1px, 0);
+            }
+            97% {
+                text-shadow: none;
+                transform: skewX(0deg) translate(0);
+            }
+        }
+
+        #main-title.is-scrolling {
+            text-shadow: 
+                4px 0 10px rgba(255, 255, 255, 0.3), 
+                -4px 0 10px rgba(100, 100, 100, 0.6) !important;
+            transform: skewX(-2deg) !important; 
         }
 
         .identity-col .subtitle {
@@ -336,15 +367,13 @@
             inset: 0;
             background-size: cover;
             background-position: center;
-            opacity: 0.7;
+            opacity: 0.7; 
             transition: opacity 0.4s ease, transform 0.6s ease;
-            filter: grayscale(100%);
         }
 
         .faction-card:hover .faction-bg-img {
-            opacity: 1;
+            opacity: 1; 
             transform: scale(1.03);
-            filter: grayscale(0%);
         }
 
         .faction-body {
@@ -431,7 +460,7 @@
             color: var(--text-main);
         }
 
-/* video player */
+        /* --- ZZZ URBAN-TECH VIDEO PLAYER STYLES --- */
         .video-container {
             width: 100%;
             aspect-ratio: 16 / 9;
@@ -442,7 +471,6 @@
             justify-content: center;
             align-items: center;
             font-family: var(--font-main);
-
             clip-path: polygon(
                 0 0, 
                 calc(100% - 20px) 0, 
@@ -451,10 +479,15 @@
                 20px 100%, 
                 0 calc(100% - 20px)
             );
-            border: 4px solid #333; /* Bulky border look */
+            border: 4px solid #333; 
         }
 
-        /* Diagonal Hash "Caution Tape" Accent (Grayscale) */
+        /* Reset styles if player is in fullscreen mode */
+        .video-container:fullscreen {
+            clip-path: none;
+            border: none;
+        }
+
         .video-container::before {
             content: "";
             position: absolute;
@@ -483,7 +516,6 @@
             position: absolute;
             background: #fff;
             color: #000;
-            /* Boxy shape with opposite cut corners */
             clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
             width: 70px;
             height: 50px;
@@ -534,7 +566,6 @@
             pointer-events: none;
             z-index: 5;
             backdrop-filter: blur(8px);
-            /* Floated, chamfered bottom bar */
             clip-path: polygon(
                 0 0, 
                 100% 0, 
@@ -550,7 +581,6 @@
             pointer-events: auto;
         }
 
-        /* Micro text labels */
         .ctrl-label {
             font-size: 0.5rem;
             color: #555;
@@ -574,7 +604,7 @@
             padding: 0;
             opacity: 0.7;
             transition: opacity 0.2s, transform 0.1s;
-            margin-top: 8px; /* Offset from micro text */
+            margin-top: 8px;
         }
 
         .ctrl-btn:hover {
@@ -598,7 +628,6 @@
             margin-top: 8px;
         }
 
-        /* Sharp/Blocky Progress Slider */
         .ctrl-slider {
             flex: 1;
             -webkit-appearance: none;
@@ -897,6 +926,95 @@
                 min-width: auto;
             }
         }
+
+        /* --- MAC-DOCK STYLE SKILLS NEWS TICKER --- */
+        #skills-ticker {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px; 
+            z-index: 998; 
+            overflow: hidden; 
+            pointer-events: none; 
+            font-family: var(--font-main);
+        }
+
+        .ticker-track {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: max-content;
+            height: 40px; 
+            background: rgba(5, 5, 5, 0.85);
+            border-top: 1px solid #222;
+            display: flex;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            pointer-events: auto; 
+            animation: scrollTicker 90s linear infinite; 
+        }
+
+        .ticker-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollTicker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 2.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #aaa;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+            cursor: default;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); 
+        }
+
+        /* INVISIBLE HIT-BOX EXTENSION: Prevents hover flickering */
+        .ticker-item::after {
+            content: '';
+            position: absolute;
+            bottom: -30px; 
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: transparent;
+        }
+
+        .ticker-icon {
+            width: 14px;
+            height: 14px;
+            fill: #666;
+            flex-shrink: 0;
+            transition: fill 0.3s;
+        }
+
+        .ticker-item:hover {
+            color: #fff;
+            transform: scale(1.8) translateY(-15px); 
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 4px 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        
+        .ticker-item:hover .ticker-icon {
+            fill: #fff;
+        }
+
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
@@ -917,7 +1035,7 @@
                 <div class="identity-col scroll-reveal" style="--delay: 0ms;">
                     <div class="name-wrapper">
                         <img src="assets/profile-pixel.png" alt="Profile" class="profile-avatar">
-                        <h1>ARCRILES</h1>
+                        <h1 id="main-title">ARCRILES</h1>
                     </div>
                     <p class="subtitle">A normal Programmer</p>
                     <div class="bio-text">
@@ -996,7 +1114,7 @@
                     </button>
 
                     <div class="custom-controls" id="custom-controls">
-                        <span class="ctrl-label"></span>
+                        <span class="ctrl-label">SYS.CTRL</span>
                         
                         <button class="ctrl-btn" id="play-pause-btn">
                             <svg id="ctrl-play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -1005,11 +1123,16 @@
                         
                         <input type="range" class="ctrl-slider" id="progress-bar" value="0" min="0" max="100">
                         
-                        <span class="ctrl-time" id="time-display">[ -:-- / -:-- ]</span>
+                        <span class="ctrl-time" id="time-display">[ 0:00 / 0:00 ]</span>
                         
                         <button class="ctrl-btn" id="mute-btn">
                             <svg id="vol-icon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
                             <svg id="mute-icon" viewBox="0 0 24 24" style="display:none;"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                        </button>
+
+                        <button class="ctrl-btn" id="fullscreen-btn">
+                            <svg id="fs-expand-icon" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                            <svg id="fs-compress-icon" viewBox="0 0 24 24" style="display:none;"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
                         </button>
                     </div>
                 </div>
@@ -1020,6 +1143,11 @@
             <div>&copy; 2026 Arcriles System.</div>
             <div>All Rights Reserved.</div>
         </footer>
+    </div>
+
+    <div id="skills-ticker">
+        <div class="ticker-track" id="ticker-track">
+            </div>
     </div>
 
     <div class="modal-overlay" id="project-modal">
@@ -1072,6 +1200,18 @@
     </div>
 
     <script>
+        // --- SCROLL-TRIGGERED GLITCH EFFECT ON TITLE ---
+        const mainTitle = document.getElementById('main-title');
+        let scrollTimeout;
+
+        window.addEventListener('scroll', () => {
+            mainTitle.classList.add('is-scrolling');
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                mainTitle.classList.remove('is-scrolling');
+            }, 100);
+        });
+
         // --- NAVIGATION & UTILS ---
         function smoothScrollTo(target, duration) {
             const targetEl = document.querySelector(target);
@@ -1107,17 +1247,42 @@
         window.onload = function () { setTimeout(() => window.scrollTo(0, 0), 10); };
 
         let projectsData = [];
+        let skillsData = [];
+
         async function fetchProjects() {
             try {
                 const response = await fetch('projects.json');
                 if (!response.ok) throw new Error("JSON Error");
                 const data = await response.json();
                 projectsData = data.projects;
+                skillsData = data.skills; 
+
                 renderProjects();
+                renderSkillsTicker(); 
             } catch (error) {
                 console.error(error);
                 document.getElementById('projects-grid').innerHTML = `<div style="color:#666;">Error loading projects.</div>`;
             }
+        }
+
+        // --- SKILLS TICKER RENDERING LOGIC ---
+        function renderSkillsTicker() {
+            if (!skillsData || skillsData.length === 0) return;
+
+            const tickerTrack = document.getElementById('ticker-track');
+            
+            const allSkills = skillsData.flatMap(cat => cat.tech.split(',').map(s => s.trim()));
+
+            const genericIconSVG = `<svg class="ticker-icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 16.5l-8-4V9l8 4 8-4v5.5l-8 4z"/></svg>`;
+
+            const skillsHTML = allSkills.map(skill => `
+                <span class="ticker-item">
+                    ${genericIconSVG}
+                    ${skill}
+                </span>
+            `).join('');
+
+            tickerTrack.innerHTML = skillsHTML + skillsHTML + skillsHTML; 
         }
 
         function renderProjects() {
@@ -1263,7 +1428,8 @@
 
         fetchProjects();
 
-        // --- CUSTOM VIDEO PLAYER LOGIC ---
+        // --- CUSTOM VIDEO PLAYER LOGIC (WITH FULLSCREEN) ---
+        const vidContainer = document.getElementById('vid-container');
         const video = document.getElementById('contact-video');
         const bigPlayBtn = document.getElementById('big-play-btn');
         const customControls = document.getElementById('custom-controls');
@@ -1275,6 +1441,9 @@
         const muteBtn = document.getElementById('mute-btn');
         const volIcon = document.getElementById('vol-icon');
         const muteIcon = document.getElementById('mute-icon');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        const fsExpandIcon = document.getElementById('fs-expand-icon');
+        const fsCompressIcon = document.getElementById('fs-compress-icon');
 
         function formatTime(seconds) {
             const min = Math.floor(seconds / 60);
@@ -1301,9 +1470,31 @@
             }
         }
 
+        // FULLSCREEN LOGIC (Applies to Container, not just Video)
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                vidContainer.requestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                fsExpandIcon.style.display = 'none';
+                fsCompressIcon.style.display = 'block';
+            } else {
+                fsExpandIcon.style.display = 'block';
+                fsCompressIcon.style.display = 'none';
+            }
+        });
+
         bigPlayBtn.addEventListener('click', togglePlay);
         playPauseBtn.addEventListener('click', togglePlay);
         muteBtn.addEventListener('click', toggleMute);
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
 
         video.addEventListener('play', () => {
             bigPlayBtn.classList.add('hidden');
@@ -1338,6 +1529,7 @@
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
             progressBar.value = 0;
+            if (document.fullscreenElement) document.exitFullscreen();
         });
     </script>
 </body>
