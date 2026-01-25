@@ -50,7 +50,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* 3D Background */
         #canvas-container {
             position: fixed;
             top: 0;
@@ -71,18 +70,20 @@
             z-index: 1;
         }
 
-        .fade-in-section {
+        /* --- UPDATED: Transition duration increased from 0.8s to 1.6s for 0.5x speed --- */
+        .scroll-reveal {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(40px);
+            transition: opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1), transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition-delay: var(--delay, 0ms); 
+            will-change: opacity, transform;
         }
 
-        .fade-in-section.is-visible {
+        .scroll-reveal.is-visible {
             opacity: 1;
-            transform: none;
+            transform: translateY(0);
         }
 
-        /* --- NAV SPY --- */
         .nav-spy {
             position: fixed;
             top: 50%;
@@ -126,7 +127,6 @@
             }
         }
 
-        /* --- ABOUT SECTION --- */
         #about {
             min-height: 100vh;
             display: flex;
@@ -211,7 +211,6 @@
             transform: translateY(-2px);
         }
 
-        /* Timeline */
         .timeline-container {
             background: rgba(20, 20, 20, 0.4);
             backdrop-filter: blur(10px);
@@ -280,7 +279,6 @@
             line-height: 1.4;
         }
 
-        /* --- PROJECTS SECTION --- */
         #projects {
             padding: 10rem 0;
         }
@@ -396,7 +394,6 @@
             line-height: 1.6;
         }
 
-        /* --- CONTACT SECTION --- */
         #contact {
             padding: 10rem 0;
         }
@@ -424,19 +421,17 @@
         .email-display {
             font-size: 2rem;
             color: var(--text-muted);
-            text-decoration: none;
+            text-decoration: underline;
+            text-underline-offset: 6px;
             transition: color 0.3s;
             display: inline-block;
             margin-bottom: 2rem;
-            border-bottom: 1px solid transparent;
         }
 
         .email-display:hover {
             color: var(--text-main);
-            border-color: var(--text-main);
         }
 
-        /* Panning Dots Upwards */
         @keyframes panDots {
             from {
                 background-position: 0 0;
@@ -487,7 +482,6 @@
             transform: scale(1);
         }
 
-        /* Footer */
         footer {
             padding: 1.5rem 0;
             font-size: 0.85rem;
@@ -502,7 +496,6 @@
             z-index: 10;
         }
 
-        /* --- MODAL --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -532,10 +525,10 @@
             width: 90%;
             max-width: 1400px;
             height: 90vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             box-shadow: 0 50px 100px rgba(0, 0, 0, 1);
-            overflow: hidden;
         }
 
         .modal-header {
@@ -576,13 +569,10 @@
             display: flex;
             flex: 1;
             overflow: hidden;
-            height: calc(100% - 60px);
         }
 
-        /* Left Side: Images */
         .gallery-area {
             flex: 1.2;
-            /* 55% Width */
             background-color: #000;
             border-right: 1px solid #222;
             overflow: hidden;
@@ -627,13 +617,11 @@
             display: block;
         }
 
-        /* Right Side: Details */
         .project-details {
             flex: 1;
-            /* 45% Width */
             background: #080808;
             padding: 3rem;
-            overflow-y: auto;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             gap: 2rem;
@@ -680,9 +668,14 @@
             color: #999;
             line-height: 1.8;
             margin-bottom: 1rem;
+            word-wrap: break-word; 
+            white-space: normal;
+            display: -webkit-box;
+            -webkit-line-clamp: 8;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        /* Lightbox */
         .lightbox-overlay {
             position: fixed;
             top: 0;
@@ -776,11 +769,11 @@
 
     <div class="container">
 
-        <section id="about" class="fade-in-section">
+        <section id="about">
             <div class="about-wrapper">
-                <div class="identity-col">
+                <div class="identity-col scroll-reveal" style="--delay: 0ms;">
                     <div class="name-wrapper">
-                        <img src="assets/profile-placeholder.png" alt="Profile" class="profile-avatar">
+                        <img src="assets/profile-pixel.png" alt="Profile" class="profile-avatar">
                         <h1>ARCRILES</h1>
                     </div>
                     <p class="subtitle">A normal Programmer</p>
@@ -793,9 +786,9 @@
                     <a href="#projects" class="cta-btn">View my Projects</a>
                 </div>
 
-                <div class="timeline-container">
+                <div class="timeline-container scroll-reveal" style="--delay: 200ms;">
                     <div class="timeline-header">Experience</div>
-                    <div class="timeline-item">
+                    <div class="timeline-item scroll-reveal" style="--delay: 300ms;">
                         <span class="time-date"
                             style="font-size: 0.75rem; color: #666; display:block; margin-bottom:0.5rem;">2024 -
                             NOW</span>
@@ -803,7 +796,7 @@
                         <div class="company">Sinarmas Agribusiness</div>
                         <div class="brief">Full-stack development and maintenance.</div>
                     </div>
-                    <div class="timeline-item">
+                    <div class="timeline-item scroll-reveal" style="--delay: 450ms;">
                         <span class="time-date"
                             style="font-size: 0.75rem; color: #666; display:block; margin-bottom:0.5rem;">2020 -
                             2024</span>
@@ -811,7 +804,7 @@
                         <div class="company">Independent Contractor</div>
                         <div class="brief">Vulnerability assessments and auditing.</div>
                     </div>
-                    <div class="timeline-item">
+                    <div class="timeline-item scroll-reveal" style="--delay: 600ms;">
                         <span class="time-date"
                             style="font-size: 0.75rem; color: #666; display:block; margin-bottom:0.5rem;">2019 -
                             2020</span>
@@ -823,8 +816,8 @@
             </div>
         </section>
 
-        <section id="projects" class="fade-in-section">
-            <div class="section-header">
+        <section id="projects">
+            <div class="section-header scroll-reveal" style="--delay: 0ms;">
                 <h2 class="section-title">Selected Works</h2>
             </div>
             <div class="projects-grid" id="projects-grid">
@@ -832,9 +825,9 @@
             </div>
         </section>
 
-        <section id="contact" class="fade-in-section">
+        <section id="contact">
             <div class="contact-wrapper">
-                <div class="contact-left">
+                <div class="contact-left scroll-reveal" style="--delay: 0ms;">
                     <div>
                         <div class="section-head">
                             <div class="section-label">Contact</div>
@@ -844,11 +837,13 @@
                             A simple Conversation is all you needed. I am open to discussing security auditing,
                             development, and new opportunities.
                         </p>
-                        <a href="mailto:arcrilest@outlook.com" class="email-display">arcrilest@outlook.com</a>
+                        <a href="mailto:arcrilest@outlook.com" class="email-display">
+                            arcrilest@outlook.com
+                        </a>
                     </div>
                 </div>
 
-                <div class="contact-visual">
+                <div class="contact-visual scroll-reveal" style="--delay: 200ms;">
                     <div class="contact-slideshow">
                         <img src="assets/pic 1.png" class="contact-img active" alt="Pic 1">
                         <img src="assets/pic 2.png" class="contact-img" alt="Pic 2">
@@ -891,6 +886,11 @@
                     </div>
 
                     <div class="meta-block">
+                        <h4>Team</h4>
+                        <div id="m-team"></div>
+                    </div>
+
+                    <div class="meta-block">
                         <h4>Reference</h4>
                         <a href="javascript:void(0)" id="m-link" target="_blank"
                             rel="noopener noreferrer">Confidential</a>
@@ -909,7 +909,6 @@
     </div>
 
     <script>
-        // --- CUSTOM SMOOTH SCROLL ---
         function smoothScrollTo(target, duration) {
             const targetEl = document.querySelector(target);
             if (!targetEl) return;
@@ -933,7 +932,6 @@
             requestAnimationFrame(animation);
         }
 
-        // FIXED: Only target nav links/buttons. Do NOT target generic links (like in modal).
         document.querySelectorAll('.nav-link[href^="#"], .cta-btn[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -941,11 +939,9 @@
             });
         });
 
-        // --- Scroll Reset ---
         if (history.scrollRestoration) history.scrollRestoration = 'manual';
         window.onload = function () { setTimeout(() => window.scrollTo(0, 0), 10); };
 
-        // --- CONTACT SLIDESHOW ---
         const contactImages = document.querySelectorAll('.contact-img');
         let currentSlide = 0;
         if (contactImages.length > 0) {
@@ -956,7 +952,6 @@
             }, 3000);
         }
 
-        // --- Fetch Projects ---
         let projectsData = [];
         async function fetchProjects() {
             try {
@@ -977,7 +972,7 @@
                 const thumb = p.images && p.images.length > 0 ? p.images[0] : '';
                 const techTag = p.tech ? p.tech.split(',')[0].trim() : 'DEV';
                 return `
-                <div class="faction-card fade-in-section" onclick="openModal(${index})">
+                <div class="faction-card scroll-reveal" style="--delay: ${index * 100}ms;" onclick="openModal(${index})">
                     <div class="faction-img-box">
                         <div class="faction-bg-img" style="background-image: url('${thumb}');"></div>
                     </div>
@@ -994,7 +989,6 @@
             initObserver();
         }
 
-        // --- Modal Logic ---
         const modal = document.getElementById('project-modal');
         function openModal(index) {
             const p = projectsData[index];
@@ -1003,8 +997,16 @@
             document.getElementById('m-year').textContent = p.year;
             document.getElementById('m-tech').textContent = p.tech;
 
+            const teamContainer = document.getElementById('m-team');
+            if (p.team && p.team.length > 0) {
+                teamContainer.innerHTML = p.team.map(member => `
+                    <p><span style="color: #777;">${member.label}:</span> <span style="color: #ddd;">${member.value}</span></p>
+                `).join('');
+            } else {
+                teamContainer.innerHTML = `<p style="color:#666;">Individual Project</p>`;
+            }
+
             const linkEl = document.getElementById('m-link');
-            // Force attributes for opening in new tab
             linkEl.setAttribute('target', '_blank');
             linkEl.setAttribute('rel', 'noopener noreferrer');
 
@@ -1049,7 +1051,6 @@
         function openLightbox(src) { document.getElementById('lightbox-img').src = src; lightbox.classList.add('active'); }
         function closeLightbox() { lightbox.classList.remove('active'); }
 
-        // --- 3D Background ---
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0x050505, 0.002);
@@ -1079,12 +1080,17 @@
         animate();
         window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
 
-        // --- OBSERVER ---
         function initObserver() {
             const fadeObserver = new IntersectionObserver((entries) => {
-                entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
-            }, { threshold: 0.1 });
-            document.querySelectorAll('.fade-in-section').forEach(s => fadeObserver.observe(s));
+                entries.forEach(e => { 
+                    if (e.isIntersecting) {
+                        e.target.classList.add('is-visible'); 
+                    } else {
+                        e.target.classList.remove('is-visible');
+                    }
+                });
+            }, { threshold: 0.05 });
+            document.querySelectorAll('.scroll-reveal').forEach(s => fadeObserver.observe(s));
 
             const navLinks = document.querySelectorAll('.nav-link');
             const spyObserver = new IntersectionObserver((entries) => {
