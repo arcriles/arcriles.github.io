@@ -18,10 +18,6 @@
             --text-muted: #888888;
             --border: #222222;
             --border-focus: rgba(255, 255, 255, 0.5);
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --glass-bg: rgba(20, 20, 20, 0.6);
-            --hover-border: #444444;
-            --accent-color: #ffffff;
             --radius-main: 12px;
             --font-main: 'Inter', sans-serif;
         }
@@ -168,7 +164,6 @@
             border-color: #fff;
         }
 
-        /* --- TITLE BASE & ANIMATION --- */
         #main-title {
             font-size: 4.5rem;
             font-weight: 800;
@@ -176,34 +171,7 @@
             margin: 0;
             letter-spacing: -0.03em;
             position: relative;
-            transition: text-shadow 0.1s ease, transform 0.1s ease;
-            animation: minorGlitch 4s infinite linear;
-        }
-
-        @keyframes minorGlitch {
-            0%, 94%, 100% {
-                text-shadow: none;
-                transform: skewX(0deg) translate(0);
-            }
-            95% {
-                text-shadow: 2px 0 0 rgba(255, 255, 255, 0.4), -2px 0 0 rgba(100, 100, 100, 0.4);
-                transform: skewX(-5deg) translate(-1px, 0);
-            }
-            96% {
-                text-shadow: -2px 0 0 rgba(255, 255, 255, 0.4), 2px 0 0 rgba(100, 100, 100, 0.4);
-                transform: skewX(2deg) translate(1px, 0);
-            }
-            97% {
-                text-shadow: none;
-                transform: skewX(0deg) translate(0);
-            }
-        }
-
-        #main-title.is-scrolling {
-            text-shadow: 
-                4px 0 10px rgba(255, 255, 255, 0.3), 
-                -4px 0 10px rgba(100, 100, 100, 0.6) !important;
-            transform: skewX(-2deg) !important; 
+            min-height: 1em; 
         }
 
         .identity-col .subtitle {
@@ -444,6 +412,7 @@
             font-size: 3rem;
             font-weight: 700;
             margin-bottom: 2rem;
+            min-height: 1em;
         }
 
         .email-display {
@@ -456,11 +425,6 @@
             margin-bottom: 2rem;
         }
 
-        .email-display:hover {
-            color: var(--text-main);
-        }
-
-        /* --- ZZZ URBAN-TECH VIDEO PLAYER STYLES --- */
         .video-container {
             width: 100%;
             aspect-ratio: 16 / 9;
@@ -482,7 +446,6 @@
             border: 4px solid #333; 
         }
 
-        /* Reset styles if player is in fullscreen mode */
         .video-container:fullscreen {
             clip-path: none;
             border: none;
@@ -927,36 +890,80 @@
             }
         }
 
-        /* --- MAC-DOCK STYLE SKILLS NEWS TICKER --- */
+        /* --- UPDATED SLIMMER SKILLS DOCK --- */
         #skills-ticker {
             position: fixed;
             bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px; 
+            left: 0; 
+            width: 100%; 
+            /* Invisible extra height to allow the text to scale up without clipping */
+            height: 120px; 
             z-index: 998; 
-            overflow: hidden; 
-            pointer-events: none; 
             font-family: var(--font-main);
+            background: transparent;
+            pointer-events: none; 
         }
 
-        .ticker-track {
+        /* SLIMMER BAR (35px) */
+        .ticker-wrap {
             position: absolute;
             bottom: 0;
             left: 0;
-            width: max-content;
-            height: 40px; 
-            background: rgba(5, 5, 5, 0.85);
-            border-top: 1px solid #222;
+            width: 100%;
+            height: 35px; /* Updated Height */
+            background: #050505;
+            border-top: 1px solid #333; 
+            border-bottom: none;
+            pointer-events: auto;
             display: flex;
             align-items: center;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            pointer-events: auto; 
-            animation: scrollTicker 90s linear infinite; 
+            overflow: visible; 
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.9);
         }
 
-        .ticker-track:hover {
+        /* ADJUSTED BUMP POSITION */
+        .skills-bump {
+            position: absolute;
+            bottom: 35px; /* Sits on top of the 35px wrap */
+            left: 0; 
+            background: #fff; 
+            color: #000;
+            padding: 4px 18px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            clip-path: polygon(
+                0 0, 
+                calc(100% - 15px) 0, 
+                100% 100%, 
+                0 100%
+            );
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        .skills-bump::after {
+            content: '/// SYSTEM_OVERRIDE_ACTIVE';
+            position: absolute;
+            left: 105%;
+            bottom: 5px;
+            font-size: 0.5rem;
+            color: #fff;
+            background: #000;
+            padding: 2px 4px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .ticker-track {
+            display: flex;
+            align-items: center;
+            width: max-content;
+            animation: scrollTicker 60s linear infinite; 
+        }
+
+        .ticker-wrap:hover .ticker-track {
             animation-play-state: paused;
         }
 
@@ -970,18 +977,18 @@
             align-items: center;
             gap: 10px;
             padding: 0 2.5rem;
-            font-size: 0.75rem;
-            font-weight: 700;
+            font-size: 0.7rem; 
+            font-weight: 500;  
             color: #aaa;
             letter-spacing: 0.15em;
             text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             z-index: 1;
-            cursor: default;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            white-space: nowrap; 
         }
-
-        /* INVISIBLE HIT-BOX EXTENSION: Prevents hover flickering */
+        
         .ticker-item::after {
             content: '';
             position: absolute;
@@ -996,23 +1003,99 @@
             width: 14px;
             height: 14px;
             fill: #666;
-            flex-shrink: 0;
             transition: fill 0.3s;
         }
 
+        /* --- GLASS STYLE HOVER --- */
         .ticker-item:hover {
             color: #fff;
             transform: scale(1.8) translateY(-15px); 
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid #444;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
             padding: 4px 12px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
-        
+
         .ticker-item:hover .ticker-icon {
             fill: #fff;
+        }
+
+        /* --- GLASS STYLE TOOLTIP --- */
+        #cursor-tooltip {
+            position: fixed;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #fff; 
+            padding: 8px 14px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            font-size: 0.75rem;
+            font-weight: 500;
+            line-height: 1.4;
+            letter-spacing: 0.03em;
+            pointer-events: none;
+            z-index: 10000;
+            opacity: 0;
+            transform: translate(-50%, -100%);
+            transition: opacity 0.15s ease, transform 0.15s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            white-space: pre-line;
+            text-align: left;
+        }
+        
+        #cursor-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: rgba(10, 10, 10, 0.85) transparent transparent transparent;
+        }
+
+        /* SCROLL TOP BTN (Lowered Placement) */
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 65px; /* Lowered to align with smaller bar */
+            right: 2rem;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-focus);
+            border-radius: var(--radius-main);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1000;
+            
+            transform: translateY(200px); 
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            
+            backdrop-filter: blur(5px);
+        }
+
+        .scroll-top-btn.visible {
+            transform: translateY(0);
+        }
+
+        .scroll-top-btn:hover {
+            background: #fff;
+            color: #000;
+            transform: translateY(-5px); 
+        }
+
+        .scroll-top-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
         }
 
     </style>
@@ -1035,13 +1118,12 @@
                 <div class="identity-col scroll-reveal" style="--delay: 0ms;">
                     <div class="name-wrapper">
                         <img src="assets/profile-pixel.png" alt="Profile" class="profile-avatar">
-                        <h1 id="main-title">ARCRILES</h1>
+                        <h1 id="main-title" data-value="4RCRILES">ARCRILES</h1>
                     </div>
                     <p class="subtitle">A normal Programmer</p>
                     <div class="bio-text">
                         <p>
-                            I am a programmer creating and maintaining cloud solutions. While I focus on cybersecurity,
-                            I build complete projects. Handling everything from the code to the server infrastructure.
+I am a software developer who builds and maintains cloud-based systems with a strong focus on cybersecurity. I handle complete projects end‑to‑end, from writing application code and APIs to configuring servers and databases. I apply security best practices such as access control, encryption, and monitoring to protect data and prevent vulnerabilities. I also have experience integrating and securing IoT devices within these environments.
                         </p>
                     </div>
                     <a href="#projects" class="cta-btn">View my Projects</a>
@@ -1092,7 +1174,7 @@
                     <div>
                         <div class="section-head">
                             <div class="section-label">Contact</div>
-                            <h2 class="section-title-lg">Let's Connect</h2>
+                            <h2 class="section-title-lg" id="connect-title" data-value="Let's Connect">Let's Connect</h2>
                         </div>
                         <p style="color: var(--text-muted); margin-bottom: 2rem; font-size:1.1rem; max-width:400px;">
                             A simple Conversation is all you needed. I am open to discussing security auditing,
@@ -1146,9 +1228,13 @@
     </div>
 
     <div id="skills-ticker">
-        <div class="ticker-track" id="ticker-track">
-            </div>
+        <div class="skills-bump">SKILLS</div>
+        <div class="ticker-wrap">
+            <div class="ticker-track" id="ticker-track"></div>
+        </div>
     </div>
+    
+    <div id="cursor-tooltip"></div>
 
     <div class="modal-overlay" id="project-modal">
         <div class="modal-content">
@@ -1199,20 +1285,62 @@
         <div class="lightbox-caption">Click anywhere to close</div>
     </div>
 
+    <button id="scroll-to-top" class="scroll-top-btn">
+        <svg viewBox="0 0 24 24"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>
+    </button>
+
     <script>
-        // --- SCROLL-TRIGGERED GLITCH EFFECT ON TITLE ---
+        // --- CIPHER ANIMATION LOGIC ---
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        function initCipherEffect(targetElement) {
+            if(!targetElement) return;
+            
+            if(targetElement.dataset.cipherInterval) {
+                clearInterval(parseInt(targetElement.dataset.cipherInterval));
+            }
+
+            let iteration = 0;
+            const originalText = targetElement.dataset.value;
+            
+            const interval = setInterval(() => {
+                targetElement.innerText = originalText
+                    .split("")
+                    .map((letter, index) => {
+                        if(index < iteration) {
+                            return originalText[index];
+                        }
+                        if(originalText[index] === ' ') return ' ';
+                        return letters[Math.floor(Math.random() * 26)];
+                    })
+                    .join("");
+                
+                if(iteration >= originalText.length) { 
+                    clearInterval(interval);
+                }
+                
+                iteration += 1 / 3;
+            }, 30);
+            
+            targetElement.dataset.cipherInterval = interval;
+        }
+
+        const cipherObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    initCipherEffect(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
         const mainTitle = document.getElementById('main-title');
-        let scrollTimeout;
+        const connectTitle = document.getElementById('connect-title');
+        
+        if(mainTitle) cipherObserver.observe(mainTitle);
+        if(connectTitle) cipherObserver.observe(connectTitle);
 
-        window.addEventListener('scroll', () => {
-            mainTitle.classList.add('is-scrolling');
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                mainTitle.classList.remove('is-scrolling');
-            }, 100);
-        });
 
-        // --- NAVIGATION & UTILS ---
+        // --- UTILS ---
         function smoothScrollTo(target, duration) {
             const targetEl = document.querySelector(target);
             if (!targetEl) return;
@@ -1265,24 +1393,69 @@
             }
         }
 
-        // --- SKILLS TICKER RENDERING LOGIC ---
+        // --- SKILLS & TOOLTIP LOGIC ---
+        const tooltip = document.getElementById('cursor-tooltip');
+        
+        const skillInfo = {
+            "PHP": {
+                usage: "Server-side web development"
+            },
+            "JAVA": {
+                usage: "Enterprise apps, Android development"
+            },
+            "SOLIDITY": {
+                usage: "Smart contracts on Ethereum"
+            },
+            "LARAVEL": {
+                usage: "Modern PHP web application framework"
+            },
+            "BASH": {
+                usage: "Command-line scripting & automation"
+            },
+            "PHYSICAL SECURITY": {
+                usage: "Access control, surveillance, risk management"
+            }
+        };
+
         function renderSkillsTicker() {
             if (!skillsData || skillsData.length === 0) return;
 
             const tickerTrack = document.getElementById('ticker-track');
-            
             const allSkills = skillsData.flatMap(cat => cat.tech.split(',').map(s => s.trim()));
 
             const genericIconSVG = `<svg class="ticker-icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 16.5l-8-4V9l8 4 8-4v5.5l-8 4z"/></svg>`;
 
             const skillsHTML = allSkills.map(skill => `
-                <span class="ticker-item">
+                <div class="ticker-item" data-skill="${skill}">
                     ${genericIconSVG}
                     ${skill}
-                </span>
+                </div>
             `).join('');
 
             tickerTrack.innerHTML = skillsHTML + skillsHTML + skillsHTML; 
+
+            document.querySelectorAll('.ticker-item').forEach(item => {
+                item.addEventListener('mouseenter', (e) => {
+                    const skillName = e.currentTarget.getAttribute('data-skill').toUpperCase();
+                    const details = skillInfo[skillName] || { usage: "General Development" };
+                    
+                    // Removed FOUNDED line
+                    tooltip.innerHTML = `<strong>${skillName}</strong><br><span style="color:#aaa; font-size:0.7em;">USAGE: ${details.usage}</span>`;
+                    tooltip.style.opacity = '1';
+                    updateTooltipPos(e.currentTarget);
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    tooltip.style.opacity = '0';
+                });
+            });
+        }
+
+        function updateTooltipPos(targetItem) {
+            const rect = targetItem.getBoundingClientRect();
+            // Position above the item, centered horizontally
+            tooltip.style.left = (rect.left + rect.width / 2) + 'px';
+            tooltip.style.top = (rect.top - 25) + 'px'; 
         }
 
         function renderProjects() {
@@ -1370,7 +1543,6 @@
         function openLightbox(src) { document.getElementById('lightbox-img').src = src; lightbox.classList.add('active'); }
         function closeLightbox() { lightbox.classList.remove('active'); }
 
-        // --- THREE.JS BACKGROUND ---
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0x050505, 0.002);
@@ -1428,7 +1600,6 @@
 
         fetchProjects();
 
-        // --- CUSTOM VIDEO PLAYER LOGIC (WITH FULLSCREEN) ---
         const vidContainer = document.getElementById('vid-container');
         const video = document.getElementById('contact-video');
         const bigPlayBtn = document.getElementById('big-play-btn');
@@ -1470,7 +1641,6 @@
             }
         }
 
-        // FULLSCREEN LOGIC (Applies to Container, not just Video)
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
                 vidContainer.requestFullscreen().catch(err => {
@@ -1530,6 +1700,20 @@
             pauseIcon.style.display = 'none';
             progressBar.value = 0;
             if (document.fullscreenElement) document.exitFullscreen();
+        });
+
+        const scrollTopBtn = document.getElementById('scroll-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     </script>
 </body>
