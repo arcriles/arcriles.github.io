@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOVE_SYSTEM_98</title>
+    <title>LOVE_SYSTEM</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
@@ -91,19 +91,11 @@
             outline: none;
         }
 
-        #password-input::placeholder { color: #005500; }
-
         #password-error {
             color: #ff4444;
             font-size: 1.2rem;
             margin-top: 10px;
             min-height: 25px;
-        }
-
-        #password-hint {
-            color: #888;
-            font-size: clamp(0.8rem, 2.5vw, 1rem);
-            margin-top: 5px;
         }
 
         .boot-btn {
@@ -633,6 +625,23 @@
             .clippy-bubble { bottom: 87px; }
             .avatar-notification { bottom: 130px; left: 8px; }
         }
+
+        @media (max-width: 360px) {
+            .content { padding: 10px 8px; }
+            .ll-option, .option-card { font-size: 0.85rem; padding: 7px 8px; }
+            .music-option { gap: 8px; padding: 7px 8px; }
+        }
+
+        @media (max-height: 600px) {
+            .window { max-height: calc(100vh - 50px); }
+            .content { padding: 10px; }
+        }
+
+        @media (max-height: 450px) and (orientation: landscape) {
+            .window { max-height: calc(100vh - 45px); }
+            .content { padding: 8px; font-size: 0.95rem; }
+            .ll-option, .option-card { padding: 6px 8px; margin: 3px 0; }
+        }
     </style>
 </head>
 <body>
@@ -643,9 +652,9 @@
         <div class="boot-text" id="boot-text"></div>
         <div id="password-section">
             <label>🔒 Masukin tanggal rahasia kita:</label>
-            <input type="text" id="password-input" placeholder="MM/DD/YYYY" maxlength="10" autocomplete="off">
+            <input type="text" id="password-input" maxlength="10" autocomplete="off">
             <div id="password-error"></div>
-            <div id="password-hint">Hint: 12 Maret 2022 💕</div>
+            <div style="color: var(--pink); margin-top: 15px; font-size: 1.2rem;">happy valentine sayang 💕</div>
             <button class="boot-btn" onclick="checkPassword()">BUKA ♥</button>
         </div>
     </div>
@@ -653,7 +662,7 @@
     <div id="taskbar">
         <div style="display:flex; align-items: center; flex:1; min-width:0;">
             <button id="start-btn">💕 Start</button>
-            <div id="taskbar-title">LOVE_SYSTEM_98</div>
+            <div id="taskbar-title">LOVE_SYSTEM</div>
         </div>
         <div id="taskbar-clock"></div>
     </div>
@@ -1051,7 +1060,6 @@
             scleraR.position.set(-0.2, 0.55, 0.09);
             scleraR.scale.set(1, 1.2, 0.4);
 
-            // Corrected instantiation (THREE.MeshBasicMaterial)
             const pupilGeom = new THREE.SphereGeometry(0.045, 16, 16);
             const pupilMat = new THREE.MeshBasicMaterial({color: 0x000000});
 
@@ -1061,7 +1069,7 @@
             const pupilR = new THREE.Mesh(pupilGeom, pupilMat);
             pupilR.position.set(-0.2, 0.55, 0.15);
 
-            // Add new 3D floating heart asset
+            // 3D Heart Asset
             const heartShape = new THREE.Shape();
             heartShape.moveTo(0, 0);
             heartShape.bezierCurveTo(0, 0, -0.05, -0.12, -0.14, -0.12);
@@ -1119,7 +1127,7 @@
         let currentScene = 0, llIndex = 0, llScores = {W:0,T:0,G:0,A:0,P:0};
 
         const bootLines = [
-            { text: "LOVE_SYSTEM_98 BIOS v14.02.25", delay: 0 },
+            { text: "LOVE_SYSTEM BIOS v14.02.25", delay: 0 },
             { text: "Copyright (c) 2025 HeartSoft Inc.", delay: 300 },
             { text: "", delay: 400 },
             { text: "Loading modules................ OK", delay: 600 },
@@ -1566,7 +1574,7 @@
             const dashHTML = `
                 <div class="scene-transition">
                     <div id="capture-dashboard" style="background: white; padding: 40px; border: 4px solid var(--pink); text-align: left; color: #333; font-family: 'VT323', monospace; width: 100%; box-sizing: border-box; font-size: 1.4rem;">
-                        <h2 style="text-align: center; color: var(--pink); border-bottom: 3px dashed #ccc; padding-bottom: 15px; margin-bottom: 25px; font-size: 2.2rem;">SYSTEM REPORT 98</h2>
+                        <h2 style="text-align: center; color: var(--pink); border-bottom: 3px dashed #ccc; padding-bottom: 15px; margin-bottom: 25px; font-size: 2.2rem;">SYSTEM REPORT</h2>
                         
                         <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 30px;">
                             <h3 style="color: var(--navy); margin-bottom: 15px; font-size: 1.8rem;">💕 Love Language Analysis 💕</h3>
@@ -1591,6 +1599,7 @@
                         <div style="text-align: center; margin-top: 30px; padding-top: 30px; border-top: 3px dashed #ccc;">
                             <h3 style="color: var(--pink); margin-bottom: 15px; font-size: 1.8rem;">🎁 OFFICIAL VOUCHER 🎁</h3>
                             <canvas id="qr-code"></canvas>
+                            <p style="font-size: 1.2rem; color: var(--navy); font-weight: bold; margin-top: 10px;">Tukarkan voucher ini untuk mendapatkan hadiah!</p>
                             <p style="font-size: 1.1rem; color: #888; margin-top: 15px;">Generated: ${new Date().toLocaleString()}</p>
                         </div>
                     </div>
@@ -1622,7 +1631,7 @@
 
             new QRious({
                 element: document.getElementById('qr-code'),
-                value: 'VOUCHER-LOVE98-' + CONFIG.herName + '-' + Date.now(),
+                value: 'VOUCHER-LOVE-' + CONFIG.herName + '-' + Date.now(),
                 size: 200,
                 background: 'white',
                 foreground: '#000080'
