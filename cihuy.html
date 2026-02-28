@@ -1,1748 +1,366 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOVE_SYSTEM</title>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-    <style>
-        :root {
-            --bg: #ffdae0;
-            --win-bg: #ece0f8;
-            --win-border-light: #ffffff;
-            --win-border-dark: #808080;
-            --pink: #ff9aa2;
-            --blue: #b5ead7;
-            --navy: #000080;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            margin: 0;
-            overflow: hidden;
-            background: var(--bg);
-            font-family: 'VT323', monospace;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        #world {
-            position: fixed;
-            top: 0; left: 0;
-            z-index: 0;
-        }
-
-        #boot-screen {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #000080;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            padding: 20px;
-        }
-
-        .boot-text {
-            color: #aaaaaa;
-            font-size: clamp(0.8rem, 2.5vw, 1.15rem);
-            text-align: left;
-            width: 600px;
-            max-width: 100%;
-            line-height: 1.8;
-        }
-
-        .boot-text .highlight { color: #ffffff; }
-        .boot-text .love { color: #ff6b9d; }
-
-        #password-section {
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        #password-section label {
-            color: #ffffff;
-            font-size: clamp(1rem, 3vw, 1.4rem);
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        #password-input {
-            background: #000;
-            border: 2px solid #aaa;
-            color: #00ff00;
-            font-family: 'VT323', monospace;
-            font-size: clamp(1.2rem, 3.5vw, 1.5rem);
-            padding: 8px 15px;
-            text-align: center;
-            width: 220px;
-            max-width: 80%;
-            outline: none;
-        }
-
-        #password-error {
-            color: #ff4444;
-            font-size: 1.2rem;
-            margin-top: 10px;
-            min-height: 25px;
-        }
-
-        .boot-btn {
-            background: #444;
-            border: 2px solid #aaa;
-            color: white;
-            font-family: 'VT323', monospace;
-            font-size: 1.2rem;
-            padding: 6px 20px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .boot-btn:hover { background: #666; }
-        .boot-btn:active { background: #888; }
-
-        #taskbar {
-            position: fixed;
-            bottom: 0; left: 0;
-            width: 100%; height: 40px;
-            background: #c0c0c0;
-            border-top: 2px solid white;
-            z-index: 100;
-            display: none;
-            align-items: center;
-            padding: 0 4px;
-            justify-content: space-between;
-        }
-
-        #start-btn {
-            background: #c0c0c0;
-            border: 2px outset #fff;
-            font-family: 'VT323', monospace;
-            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-            padding: 2px 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
-        }
-
-        #taskbar-clock {
-            background: #c0c0c0;
-            border: 2px inset #888;
-            padding: 2px 8px;
-            font-size: clamp(0.85rem, 2.5vw, 1.1rem);
-            color: #000;
-            white-space: nowrap;
-        }
-
-        #taskbar-title {
-            flex: 1;
-            margin-left: 6px;
-            background: var(--navy);
-            color: white;
-            padding: 2px 6px;
-            font-size: clamp(0.7rem, 2vw, 1rem);
-            border: 2px inset #888;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        #ui {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%;
-            height: calc(100% - 40px);
-            z-index: 10;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
-            padding: 10px;
-        }
-
-        .window {
-            pointer-events: auto;
-            width: 480px;
-            max-width: 100%;
-            max-height: calc(100vh - 60px);
-            background: var(--win-bg);
-            border: 2px solid;
-            border-color: var(--win-border-light) var(--win-border-dark) var(--win-border-dark) var(--win-border-light);
-            box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
-            display: flex;
-            flex-direction: column;
-            animation: pop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes pop {
-            from { transform: scale(0) rotate(-5deg); opacity: 0; }
-            to { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-
-        .title-bar {
-            background: linear-gradient(90deg, var(--pink), var(--blue));
-            padding: 4px 6px;
-            color: white;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-            font-size: clamp(0.85rem, 2.5vw, 1rem);
-        }
-
-        .title-bar-buttons { display: flex; gap: 2px; }
-
-        .title-bar-btn {
-            width: 18px; height: 18px;
-            background: #c0c0c0;
-            border: 2px outset #fff;
-            font-size: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            font-family: 'VT323', monospace;
-        }
-
-        .content {
-            padding: 15px;
-            text-align: center;
-            font-size: clamp(1rem, 3vw, 1.3rem);
-            color: #444;
-            overflow-y: auto;
-            flex: 1;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .content::-webkit-scrollbar { width: 16px; }
-        .content::-webkit-scrollbar-track { background: #f0f0f0; border: 1px inset #ccc; }
-        .content::-webkit-scrollbar-thumb { background: #c0c0c0; border: 2px outset #ddd; }
-
-        .btn {
-            background: var(--win-bg);
-            border: 2px solid;
-            border-color: var(--win-border-light) var(--win-border-dark) var(--win-border-dark) var(--win-border-light);
-            padding: 6px 18px;
-            font-family: inherit;
-            font-size: clamp(1rem, 3vw, 1.2rem);
-            cursor: pointer;
-            margin-top: 12px;
-            transition: 0.15s;
-        }
-        .btn:active { border-style: inset; }
-        .btn:hover { background: #ffe0e8; }
-
-        .btn-pink { background: var(--pink); color: white; }
-        .btn-pink:hover { background: #ff8a94; }
-
-        .ll-progress {
-            width: 100%; height: 10px;
-            background: #ddd;
-            border: 1px inset #ccc;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .ll-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--pink), #ff6b9d);
-            transition: width 0.4s ease;
-            border-radius: 5px;
-        }
-
-        .ll-question {
-            font-size: clamp(1.1rem, 3vw, 1.3rem);
-            color: var(--navy);
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-
-        .ll-option {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 10px 14px;
-            margin: 6px 0;
-            background: white;
-            border: 2px outset #ccc;
-            font-family: inherit;
-            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-            cursor: pointer;
-            transition: 0.2s;
-            line-height: 1.3;
-        }
-
-        .ll-option:hover {
-            background: #ffe0e8;
-            transform: translateX(4px);
-            border-color: var(--pink);
-        }
-
-        .ll-option:active { border-style: inset; background: #ffd0d8; }
-
-        .ll-result-bar-wrap { margin: 8px 0; }
-
-        .ll-result-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: clamp(0.8rem, 2.2vw, 1rem);
-            color: #555;
-            margin-bottom: 3px;
-        }
-
-        .ll-result-track {
-            width: 100%; height: 22px;
-            background: #eee;
-            border: 1px inset #ccc;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .ll-result-fill {
-            height: 100%;
-            border-radius: 3px;
-            transition: width 1.2s ease;
-            width: 0%;
-        }
-
-        .ll-result-fill.words { background: linear-gradient(90deg, #667eea, #764ba2); }
-        .ll-result-fill.time { background: linear-gradient(90deg, #f093fb, #f5576c); }
-        .ll-result-fill.gifts { background: linear-gradient(90deg, #43e97b, #38f9d7); }
-        .ll-result-fill.service { background: linear-gradient(90deg, #4facfe, #00f2fe); }
-        .ll-result-fill.touch { background: linear-gradient(90deg, #fa709a, #fee140); }
-
-        .ll-description {
-            background: white;
-            border: 2px inset #ccc;
-            padding: 14px;
-            margin: 12px 0;
-            text-align: left;
-            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-            line-height: 1.5;
-            color: #444;
-        }
-
-        .option-card {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 12px 16px;
-            margin: 6px 0;
-            background: white;
-            border: 2px outset #ccc;
-            font-family: inherit;
-            font-size: clamp(0.95rem, 2.8vw, 1.15rem);
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .option-card:hover {
-            background: #ffe0e8;
-            transform: translateX(4px);
-        }
-
-        .option-card:active { border-style: inset; }
-
-        .option-card.selected {
-            background: #d4edda;
-            border-color: #28a745;
-        }
-
-        .input-area {
-            width: 100%;
-            min-height: 80px;
-            background: white;
-            border: 2px inset #ccc;
-            font-family: 'VT323', monospace;
-            font-size: clamp(1rem, 3vw, 1.2rem);
-            padding: 12px;
-            resize: vertical;
-            outline: none;
-            color: #333;
-            line-height: 1.5;
-        }
-
-        .input-area:focus { border-color: var(--pink); }
-        .input-area::placeholder { color: #bbb; }
-
-        .music-option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            padding: 10px 14px;
-            margin: 6px 0;
-            background: #1a1a2e;
-            border: 2px outset #444;
-            color: white;
-            font-family: inherit;
-            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-            cursor: pointer;
-            transition: 0.25s;
-            border-radius: 4px;
-            position: relative;
-        }
-
-        .music-option .song-info { text-align: left; flex: 1; }
-        .music-option .song-title { font-size: clamp(0.95rem, 2.5vw, 1.15rem); }
-        .music-option .song-artist { font-size: clamp(0.75rem, 2vw, 0.9rem); opacity: 0.6; }
-
-        .movie-option {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 14px 16px;
-            margin: 6px 0;
-            background: white;
-            border: 2px outset #ccc;
-            font-family: inherit;
-            cursor: pointer;
-            transition: 0.25s;
-        }
-
-        .movie-option:hover {
-            background: #ffe0e8;
-            transform: translateX(4px);
-            border-color: var(--pink);
-        }
-
-        .movie-option:active { border-style: inset; }
-
-        .movie-title {
-            font-size: clamp(1rem, 3vw, 1.2rem);
-            color: var(--navy);
-            font-weight: bold;
-        }
-
-        .movie-genre {
-            font-size: clamp(0.75rem, 2vw, 0.9rem);
-            color: #888;
-            margin-top: 2px;
-        }
-
-        .yn-container {
-            position: relative;
-            width: 100%;
-            height: 160px;
-            margin-top: 15px;
-        }
-
-        .yn-yes {
-            background: #d4edda;
-            border: 2px outset #28a745;
-            padding: 10px 25px;
-            font-family: inherit;
-            font-size: clamp(1.1rem, 3vw, 1.4rem);
-            cursor: pointer;
-            transition: 0.2s;
-            position: relative;
-            z-index: 2;
-        }
-        .yn-yes:hover { transform: scale(1.1); background: #b7dfbf; }
-
-        .yn-no {
-            background: #f8d7da;
-            border: 2px outset #dc3545;
-            padding: 10px 25px;
-            font-family: inherit;
-            font-size: clamp(1.1rem, 3vw, 1.4rem);
-            cursor: pointer;
-            position: absolute;
-            z-index: 3;
-            transition: none;
-        }
-
-        .yn-btn-row {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-        }
-
-        #clippy-wrap {
-            position: fixed;
-            bottom: 45px;
-            left: 10px;
-            z-index: 200;
-            display: none;
-            cursor: pointer;
-        }
-
-        #clippy-canvas-3d {
-            width: 80px;
-            height: 100px;
-            display: block;
-        }
-
-        .clippy-bubble {
-            position: absolute;
-            bottom: 105px;
-            left: -5px;
-            width: clamp(180px, 55vw, 260px);
-            background: #ffffcc;
-            border: 2px solid #333;
-            border-radius: 8px;
-            padding: 10px 12px;
-            font-size: clamp(0.8rem, 2.2vw, 1rem);
-            color: #333;
-            box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
-            display: none;
-            line-height: 1.4;
-            z-index: 201;
-        }
-
-        .clippy-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 30px;
-            border: 5px solid transparent;
-            border-top-color: #333;
-        }
-
-        .clippy-bubble::before {
-            content: '';
-            position: absolute;
-            bottom: -7px;
-            left: 31px;
-            border: 4px solid transparent;
-            border-top-color: #ffffcc;
-            z-index: 1;
-        }
-
-        .clippy-name {
-            font-weight: bold;
-            color: var(--navy);
-            font-size: clamp(0.75rem, 2vw, 0.9rem);
-            margin-bottom: 3px;
-        }
-
-        .clippy-close {
-            position: absolute;
-            top: 2px; right: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            color: #888;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-        .clippy-close:hover { color: #333; }
-
-        .avatar-notification {
-            position: fixed;
-            bottom: 155px;
-            left: 15px;
-            background: white;
-            border: 2px solid var(--pink);
-            border-radius: 8px;
-            padding: 10px 14px;
-            font-size: clamp(0.9rem, 2.5vw, 1.2rem);
-            color: var(--navy);
-            z-index: 300;
-            box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
-            animation: notifPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-width: clamp(200px, 70vw, 280px);
-        }
-
-        @keyframes notifPop {
-            from { transform: scale(0) translateY(20px); opacity: 0; }
-            to { transform: scale(1) translateY(0); opacity: 1; }
-        }
-
-        .floating-hearts {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none; z-index: 50;
-        }
-
-        .float-heart {
-            position: absolute; bottom: -50px;
-            font-size: 2rem;
-            animation: floatUp 4s ease-in forwards;
-            opacity: 0.8;
-            color: var(--pink);
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
-            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
-        }
-
-        .particle-container {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none; z-index: 5;
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px; height: 4px;
-            background: var(--pink);
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: particleFloat 8s linear infinite;
-        }
-
-        @keyframes particleFloat {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.3; }
-            90% { opacity: 0.3; }
-            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
-        }
-
-        .scene-transition { animation: slideIn 0.4s ease; }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hidden { display: none !important; }
-
-        @media (max-width: 480px) {
-            #ui { padding: 5px; }
-            .content { padding: 12px 10px; }
-            .window { max-height: calc(100vh - 55px); }
-            .ll-option, .option-card, .music-option, .movie-option { padding: 8px 10px; margin: 4px 0; }
-            #clippy-wrap { left: 5px; bottom: 42px; }
-            #clippy-canvas-3d { width: 65px; height: 82px; }
-            .clippy-bubble { bottom: 87px; }
-            .avatar-notification { bottom: 130px; left: 8px; }
-        }
-
-        @media (max-width: 360px) {
-            .content { padding: 10px 8px; }
-            .ll-option, .option-card { font-size: 0.85rem; padding: 7px 8px; }
-            .music-option { gap: 8px; padding: 7px 8px; }
-        }
-
-        @media (max-height: 600px) {
-            .window { max-height: calc(100vh - 50px); }
-            .content { padding: 10px; }
-        }
-
-        @media (max-height: 450px) and (orientation: landscape) {
-            .window { max-height: calc(100vh - 45px); }
-            .content { padding: 8px; font-size: 0.95rem; }
-            .ll-option, .option-card { padding: 6px 8px; margin: 3px 0; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Codepen Tribune</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Girassol&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Jacquard+24&display=swap">
+<style>
+:root {
+  --font-body: "IBM Plex Mono", "Courier", monospace;
+  --font-heading: "Girassol", serif;
+  --font-misc: "Jacquard 24", Roboto, system-ui;
+
+  --color-text: #171717;
+  --color-bg: #d0bdb3;
+
+  --mouse-x: 50vw;
+  --mouse-y: 50vh;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-bg);
+  background-color: var(--color-text);
+  display: grid;
+  place-content: center;
+  padding: 50px 1rem;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.hint {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.news {
+  max-width: clamp(300px, 900px, 80vw);
+  margin: 0 auto;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  padding: 1rem;
+}
+
+.news__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-family: var(--font-misc);
+  padding-bottom: 1rem;
+}
+
+.news__header__title {
+  font-size: 3rem;
+  line-height: 0.5;
+  padding-top: 0.2em;
+}
+
+.news__header__subtitle {
+  font-size: 1.25rem;
+}
+
+.news__info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 0;
+  font-weight: bold;
+  text-transform: capitalize;
+  border-block: 2px double var(--color-text);
+  font-size: 0.825rem;
+}
+
+.news__content {
+  padding-block: 1rem;
+}
+
+.news__heading {
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+}
+
+.news__subheading {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 2vw, 1.5rem);
+}
+
+.news__image {
+  aspect-ratio: 4/3;
+}
+
+.news__image img {
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center top;
+  width: 100%;
+  height: 100%;
+}
+
+.news__column {
+  columns: 2 auto;
+  padding-top: 1rem;
+}
+
+.news__highlight {
+  font-weight: bold;
+  font-family: var(--font-heading);
+}
+
+/* --- Investigator Glass Effect --- */
+.overlay-darkness {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.3);
+  pointer-events: none;
+  mask-image: radial-gradient(
+    circle at var(--mouse-x) var(--mouse-y),
+    transparent 120px,
+    black 130px
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--mouse-x) var(--mouse-y),
+    transparent 120px,
+    black 130px
+  );
+}
+
+.overlay-hidden-text {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  mask-image: radial-gradient(
+    circle at var(--mouse-x) var(--mouse-y),
+    black 120px,
+    transparent 130px
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--mouse-x) var(--mouse-y),
+    black 120px,
+    transparent 130px
+  );
+}
+
+.overlay-hidden-text p {
+  position: absolute;
+  margin: 0;
+  color: #c80000;
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: bold;
+  opacity: 1;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+  letter-spacing: 0.1em;
+}
+
+.overlay-hidden-text p:nth-child(1) {
+  top: 25%;
+  left: 30%;
+}
+
+.overlay-hidden-text p:nth-child(2) {
+  top: 80%;
+  right: 40%;
+}
+
+.overlay-hidden-text p:nth-child(3) {
+  top: 50%;
+  right: 30%;
+}
+</style>
 </head>
 <body>
 
-    <canvas id="world"></canvas>
+<div class="hint">Move your mouse across the site</div>
+<div class="overlay-darkness"></div>
+<div class="overlay-hidden-text">
+  <p>SHE IS WATCHING</p>
+  <p>IT WASN'T HER</p>
+  <p>BEHIND YOU</p>
+</div>
 
-    <div id="boot-screen">
-        <div class="boot-text" id="boot-text"></div>
-        <div id="password-section">
-            <label>🔒 Masukin tanggal rahasia kita:</label>
-            <input type="text" id="password-input" maxlength="10" autocomplete="off">
-            <div id="password-error"></div>
-            <div style="color: var(--pink); margin-top: 15px; font-size: 1.2rem;">happy valentine sayang 💕</div>
-            <button class="boot-btn" onclick="checkPassword()">BUKA ♥</button>
-        </div>
+<main class="news">
+  <section class="news__header">
+    <h1 class="news__header__title">The Codepen</h1>
+    <p class="news__header__subtitle">Tribune</p>
+  </section>
+  <section class="news__info">
+    <span class="news__info__field">ISSUE NO. 131313</span>
+    <span class="news__info__field">OCTOBER 31<span class="sup">st</span>, 1957</span>
+    <span class="news__info__field">VOL. 1369</span>
+  </section>
+  <article class="news__content">
+    <h2 class="news__heading">'HALLOWEEN HOSTESS' TERROR ENDS</h2>
+    <h3 class="news__subheading">
+      Notorious Beauty Found Dead in Kitchen; City Breathes Sigh of Relief
+      on All Hallows' Eve
+    </h3>
+
+    <div class="news__column column--2">
+      <figure class="news__image">
+        <img src="" alt="" class="news__image__img" />
+      </figure>
+      <span class="news__highlight">CODEPEN CITY, Oct. 31 —</span> The
+      three-year reign of terror attributed to the so-called "Halloween
+      Hostess" came to a grim and sudden end this morning, as police
+      discovered the body of the suspected slayer, Evelyn Harlow, on the
+      floor of her own kitchen. Harlow, 28, whose shocking beauty and
+      alleged depravity have held this city in a grip of fear every October,
+      was found dead at approximately 7:30 a.m. by officers responding to a
+      welfare check. Police found Harlow, clad in a floral house dress and a
+      string of pearls, lying supine on the checkered linoleum of her
+      otherwise tidy home on Elmview Avenue. Authorities noted several empty
+      green bottles scattered on the floor near her body, though a
+      definitive cause of death is pending a full report from the coroner's
+      office. "It's a grim denouement to a dark chapter for Codepen City,"
+      stated a weary Police Chief Miles Brody, who was on the scene. "While
+      the investigation is in its earliest stages, the city can rest easier
+      tonight knowing Mrs. Harlow will not be hosting any more of her...
+      gatherings." That chilling moniker was earned after a series of
+      gruesome slayings that paralyzed the city. For the past three autumns,
+      unsuspecting gentlemen, lured by Harlow's considerable charm, would
+      vanish just before Halloween. Their bodies were discovered days later,
+      posed in macabre, theatrical tableaus resembling ghoulish holiday
+      decorations in various abandoned parts of the city. The constabulary
+      had been baffled, unable to connect the poised, elegant Evelyn
+      Harlow—a woman known for her prize-winning roses and quiet demeanor—to
+      the string of fiendish murders. "She was always so... put together,"
+      said Mrs. Agnes Pinter, a neighbor who had alerted the police after
+      noticing Harlow's morning papers piling up. "She'd borrow a cup of
+      sugar! To think... to think that was living right across the street...
+      it's just dreadful. And to be found this way, on Halloween of all
+      nights! It's like something out of a pulp novel." To her neighbors,
+      Evelyn Harlow was a charming, if reclusive, widow. But to the few
+      detectives who suspected her, she was a cunning and twisted mind, a
+      "black widow" who turned the wholesome traditions of autumn into a
+      stage for her grotesque art. Detectives are now meticulously tearing
+      the seemingly quaint home apart, searching for evidence that will
+      definitively link Harlow to the half-dozen murders. They are seeking
+      poisons, trophies, and, most of all, a diary or journal that might
+      explain the madness behind the mask of beauty. "What drives a woman of
+      her poise and breeding to such depravity... is a question we may never
+      answer," Chief Brody added, addressing reporters on the lawn. "The
+      scene inside suggests a tragic end, but whether it was a case of her
+      own twisted games finally catching up to her, or an accidental
+      overdose, remains to be seen." As dusk falls on Codepen City and
+      children in costume prepare to take to the streets, the shadow that
+      has long loomed over this holiday has finally lifted. But for the
+      residents of Elmview Avenue, the memory of the beautiful woman in the
+      tidy house at number 214 will remain a chilling reminder that true
+      monsters often wear the most convincing masks.
     </div>
+  </article>
+</main>
+
+<script>
+window.addEventListener("mousemove", (e) => {
+  document.documentElement.style.setProperty("--mouse-x", `${e.clientX}px`);
+  document.documentElement.style.setProperty("--mouse-y", `${e.clientY}px`);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const TOTAL_FRAMES = 16;
+  const MIDDLE_FRAME_INDEX = 7;
+  const imgEl = document.querySelector(".news__image__img");
+  const body = document.body;
+  let currentFrameIndex = MIDDLE_FRAME_INDEX;
+
+  const framePaths = [
+    "https://domare.hernandack.com/uploads/e6c52ba2a920c7077f86a29968ea6048.jpg",
+    "https://domare.hernandack.com/uploads/cdae3e551068e691d1611cafacafe82f.jpg",
+    "https://domare.hernandack.com/uploads/0612106a96575d57696cbe1001f1f927.jpg",
+    "https://domare.hernandack.com/uploads/1fd3050061ea42a3cb00383f9b495181.jpg",
+    "https://domare.hernandack.com/uploads/f6d5bb30374f8e98fd069ed4d42aab8c.jpg",
+    "https://domare.hernandack.com/uploads/b77107104899b4ad77b25b860f103ffe.jpg",
+    "https://domare.hernandack.com/uploads/c486df566d47f5ccdf583d445d379723.jpg",
+    "https://domare.hernandack.com/uploads/3d6f365831959b3a16c8df2fe9fb3a02.jpg",
+    "https://domare.hernandack.com/uploads/4e3619f87a486b9545e5c1bbea474632.jpg",
+    "https://domare.hernandack.com/uploads/ecd82200b3d85c415fb5b262526ace1f.jpg",
+    "https://domare.hernandack.com/uploads/b09bd9f4b075251be22cc18d4b962b9b.jpg",
+    "https://domare.hernandack.com/uploads/2b5e0fac4e4b05d7d4c5dfebed77d3bb.jpg",
+    "https://domare.hernandack.com/uploads/82766f39a3f49e343ba4a25d809d570d.jpg",
+    "https://domare.hernandack.com/uploads/f8afe7c59e7da4723700a20695de5c11.jpg",
+    "https://domare.hernandack.com/uploads/4283373cb20ca0f85fde8a1c00f57427.jpg",
+    "https://domare.hernandack.com/uploads/f62dffd1ff65d092ad19ecf01c4d8afc.jpg",
+  ];
+
+  function preloadImages() {
+    console.log("Preloading frames...");
+    const promises = framePaths.map((path) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = path;
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+    });
+    return Promise.all(promises);
+  }
+
+  function updateFrame(newIndex) {
+    if (newIndex === currentFrameIndex) {
+      return;
+    }
+    imgEl.src = framePaths[newIndex];
+    currentFrameIndex = newIndex;
+  }
+
+  function handleMouseMove(e) {
+    const percentX = e.clientX / window.innerWidth;
+
+    let targetIndex;
+
+    if (percentX >= 0.5) {
+      const percentRight = (percentX - 0.5) * 2;
+      const framesInRightHalf = TOTAL_FRAMES - 1 - MIDDLE_FRAME_INDEX;
+      const offset = Math.round(percentRight * framesInRightHalf);
+      targetIndex = MIDDLE_FRAME_INDEX + offset;
+    } else {
+      const percentLeft = percentX * 2;
+      targetIndex = Math.round(percentLeft * MIDDLE_FRAME_INDEX);
+    }
+
+    updateFrame(targetIndex);
+  }
+
+  async function main() {
+    if (framePaths.length !== TOTAL_FRAMES) {
+      console.error(
+        `Error: TOTAL_FRAMES is ${TOTAL_FRAMES} but framePaths array only has ${framePaths.length} items.`
+      );
+      return;
+    }
+
+    imgEl.src = framePaths[MIDDLE_FRAME_INDEX];
+
+    try {
+      await preloadImages();
+      body.addEventListener("mousemove", handleMouseMove);
+    } catch (err) {
+      console.error("Failed to preload images:", err);
+    }
+  }
+
+  main();
+});
+</script>
 
-    <div id="taskbar">
-        <div style="display:flex; align-items: center; flex:1; min-width:0;">
-            <button id="start-btn">💕 Start</button>
-            <div id="taskbar-title">LOVE_SYSTEM</div>
-        </div>
-        <div id="taskbar-clock"></div>
-    </div>
-
-    <div class="particle-container" id="particles"></div>
-    <div class="floating-hearts" id="floating-hearts"></div>
-
-    <div id="clippy-wrap" onclick="toggleClippyBubble(event)">
-        <div class="clippy-bubble" id="clippy-bubble">
-            <button class="clippy-close" onclick="event.stopPropagation(); hideClippyBubble()">X</button>
-            <div class="clippy-name">📎 Clippy:</div>
-            <div id="clippy-text">Hai! Aku temenin kamu ya! 💕</div>
-        </div>
-        <canvas id="clippy-canvas-3d"></canvas>
-    </div>
-
-    <div id="ui">
-        <div class="window" id="main-window">
-            <div class="title-bar">
-                <span id="win-title">SYSTEM</span>
-                <div class="title-bar-buttons">
-                    <div class="title-bar-btn">_</div>
-                    <div class="title-bar-btn">[]</div>
-                    <div class="title-bar-btn">X</div>
-                </div>
-            </div>
-            <div class="content" id="win-content"></div>
-        </div>
-    </div>
-
-    <script>
-        const CONFIG = {
-            password: "12/03/2022",
-            herName: "Sayangku",
-            giftVideoUrl: "gift.mp4"
-        };
-
-        const LL_QUIZ = [
-            {
-                q: "Aku ngerasa paling disayang kalo ayam...",
-                options: [
-                    { text: "Bilang 'aku sayang kamu' dan muji aku tulus", lang: "W" },
-                    { text: "Kasih perhatian full tanpa gangguan", lang: "T" },
-                    { text: "Kasih surprise kecil yang thoughtful", lang: "G" },
-                    { text: "Bantuin aku tanpa diminta", lang: "A" },
-                    { text: "Genggam tangan atau peluk aku", lang: "P" }
-                ]
-            },
-            {
-                q: "Kalo lagi bad day, aku butuh ayam buat...",
-                options: [
-                    { text: "Semangatin kayak 'kamu pasti bisa, aku percaya'", lang: "W" },
-                    { text: "Tinggalin semua kerjaan dan temenin aku", lang: "T" },
-                    { text: "Bawain jajanan favorit atau sesuatu", lang: "G" },
-                    { text: "Urus semua biar aku tinggal istirahat", lang: "A" },
-                    { text: "Peluk aku sampe aku tenang", lang: "P" }
-                ]
-            },
-            {
-                q: "Aku ngerasa paling spesial kalo...",
-                options: [
-                    { text: "Ayam nulis pesan yang bikin meleleh", lang: "W" },
-                    { text: "Kita punya quality time seharian", lang: "T" },
-                    { text: "Dapet hadiah yang nunjukin dia kenal aku banget", lang: "G" },
-                    { text: "Ayam ngerjain hal yang aku males lakuin", lang: "A" },
-                    { text: "Ayam affectionate di depan orang", lang: "P" }
-                ]
-            },
-            {
-                q: "Aku tau orang beneran care kalo dia...",
-                options: [
-                    { text: "Sering bilang hal-hal manis", lang: "W" },
-                    { text: "Selalu sempetin waktu walau sibuk", lang: "T" },
-                    { text: "Inget hal kecil yang pernah aku sebut", lang: "G" },
-                    { text: "Langsung lakuin tanpa diminta", lang: "A" },
-                    { text: "Sentuh aku natural — pegang tangan, rangkul gitu", lang: "P" }
-                ]
-            },
-            {
-                q: "Yang paling bikin aku sedih kalo ayam...",
-                options: [
-                    { text: "Jarang ngomong yang manis-manis", lang: "W" },
-                    { text: "Sibuk terus dan nggak fokus kalo bareng", lang: "T" },
-                    { text: "Lupa tanggal penting atau nggak pernah surprise", lang: "G" },
-                    { text: "Nggak bantuin padahal liat aku kewalahan", lang: "A" },
-                    { text: "Nggak mau deket-deket secara fisik", lang: "P" }
-                ]
-            },
-            {
-                q: "Date night ideal aku tuh...",
-                options: [
-                    { text: "Ngobrol deep bareng, curhat-curhatan", lang: "W" },
-                    { text: "Apapun asal bareng dan HP disingkirin", lang: "T" },
-                    { text: "Saling kasih surprise kecil yang lucu", lang: "G" },
-                    { text: "Ayam yang plan semua, aku tinggal dateng", lang: "A" },
-                    { text: "Cuddling, pegang tangan, deket terus", lang: "P" }
-                ]
-            },
-            {
-                q: "Surprise paling best yang bisa ayam kasih...",
-                options: [
-                    { text: "Surat cinta atau voice note bilang sayang", lang: "W" },
-                    { text: "Cancel semua buat habiskan hari sama aku", lang: "T" },
-                    { text: "Hadiah yang dipikirin mateng-mateng", lang: "G" },
-                    { text: "Pulang rumah udah bersih rapi semua", lang: "A" },
-                    { text: "Slow dance random atau pelukan panjang", lang: "P" }
-                ]
-            },
-            {
-                q: "Kalo lagi sakit, aku pengen ayam...",
-                options: [
-                    { text: "Chat yang sweet dan cek kondisi terus", lang: "W" },
-                    { text: "Nemenin seharian nggak kemana-mana", lang: "T" },
-                    { text: "Bawain sup, obat, dan comfort food", lang: "G" },
-                    { text: "Handle semua urusan biar aku fokus sembuh", lang: "A" },
-                    { text: "Peluk, elus kepala, jagain aku", lang: "P" }
-                ]
-            },
-            {
-                q: "Aku ngerasa jauh dari ayam kalo...",
-                options: [
-                    { text: "Berhari-hari nggak ada kata manis", lang: "W" },
-                    { text: "Udah lama nggak quality time berdua", lang: "T" },
-                    { text: "Dia stop effort buat surprise", lang: "G" },
-                    { text: "Kayak ngurus semuanya sendiri", lang: "A" },
-                    { text: "Udah lama nggak ada sentuhan sayang", lang: "P" }
-                ]
-            },
-            {
-                q: "Di depan orang, aku suka kalo ayam...",
-                options: [
-                    { text: "Bangga kenalin aku dan puji aku ke orang", lang: "W" },
-                    { text: "Fokus ke aku bukan scroll HP", lang: "T" },
-                    { text: "Random beliin sesuatu karena kepikiran aku", lang: "G" },
-                    { text: "Bukaain pintu, bawain barang, take care aku", lang: "A" },
-                    { text: "Rangkul atau pegang tangan terus", lang: "P" }
-                ]
-            },
-            {
-                q: "Habis berantem, aku ngerasa beres kalo ayam...",
-                options: [
-                    { text: "Minta maaf tulus pake kata-kata yang nyentuh", lang: "W" },
-                    { text: "Duduk bareng ngobrol sampe kelar", lang: "T" },
-                    { text: "Bawain bunga atau something buat peace", lang: "G" },
-                    { text: "Buktiin lewat tindakan kalo dia berubah", lang: "A" },
-                    { text: "Langsung peluk erat tanpa ngomong", lang: "P" }
-                ]
-            },
-            {
-                q: "Yang paling aku hargain dari hubungan...",
-                options: [
-                    { text: "Denger 'aku sayang kamu' tiap hari tulus", lang: "W" },
-                    { text: "Punya quality time rutin tanpa gangguan", lang: "T" },
-                    { text: "Effort dibalik hadiah, sekecil apapun", lang: "G" },
-                    { text: "Pasangan yang tau kebutuhanku tanpa diminta", lang: "A" },
-                    { text: "Sentuhan sayang yang konsisten", lang: "P" }
-                ]
-            },
-            {
-                q: "Ultah perfect aku tuh...",
-                options: [
-                    { text: "Dapet surat atau speech tentang artinya aku", lang: "W" },
-                    { text: "Seharian full bareng, udah di-plan", lang: "T" },
-                    { text: "Hadiah yang udah lama pengen", lang: "G" },
-                    { text: "Dia urus semuanya, aku tinggal enjoy", lang: "A" },
-                    { text: "Bangun pagi dengan breakfast dan pelukan", lang: "P" }
-                ]
-            },
-            {
-                q: "Kalo ketemu ayam setelah lama pisah...",
-                options: [
-                    { text: "Pengen denger semua yang dia rasain", lang: "W" },
-                    { text: "Mau habiskan seharian catch up bareng", lang: "T" },
-                    { text: "Berharap dia bawa oleh-oleh", lang: "G" },
-                    { text: "Notice kalo dia siapin sesuatu buat aku", lang: "A" },
-                    { text: "Langsung lari peluk dia", lang: "P" }
-                ]
-            },
-            {
-                q: "Romantis sehari-hari buat aku tuh...",
-                options: [
-                    { text: "Random text 'lagi mikirin kamu' di tengah hari", lang: "W" },
-                    { text: "Ritual tiap malam ngobrol atau lakuin sesuatu bareng", lang: "T" },
-                    { text: "Kejutan kecil ditaro diam-diam buat aku temuin", lang: "G" },
-                    { text: "Bikinin kopi, siapin barang, bantu hal kecil", lang: "A" },
-                    { text: "Cium bye, peluk pas ketemu, sentuh lembut", lang: "P" }
-                ]
-            },
-            {
-                q: "Aku ngerasa paling menarik kalo ayam...",
-                options: [
-                    { text: "Bilang exactly apa yang dia suka dari aku", lang: "W" },
-                    { text: "Nggak bisa berhenti liatin aku", lang: "T" },
-                    { text: "Pilihin sesuatu spesial buat aku pake", lang: "G" },
-                    { text: "Extra effort bikin aku merasa dijaga", lang: "A" },
-                    { text: "Nggak bisa jauh-jauh, mau deket terus", lang: "P" }
-                ]
-            },
-            {
-                q: "Kalo cuma boleh pilih SATU hal selamanya...",
-                options: [
-                    { text: "Denger 'aku sayang kamu' tulus tiap hari", lang: "W" },
-                    { text: "Quality time tanpa gangguan tiap hari", lang: "T" },
-                    { text: "Surprise yang bermakna tiap minggu", lang: "G" },
-                    { text: "Pasangan yang selalu tanggung bareng", lang: "A" },
-                    { text: "Kedekatan fisik dan kehangatan setiap saat", lang: "P" }
-                ]
-            },
-            {
-                q: "Kalo stress kerjaan, yang paling bikin nyaman...",
-                options: [
-                    { text: "'Kamu tuh hebat. Aku percaya sama kamu.'", lang: "W" },
-                    { text: "Dia duduk temenin, nggak perlu ngomong", lang: "T" },
-                    { text: "Nemu care package atau sesuatu dari dia", lang: "G" },
-                    { text: "Pulang makan udah siap, rumah beres", lang: "A" },
-                    { text: "Pijet, elus kepala, atau dipeluk sambil curhat", lang: "P" }
-                ]
-            },
-            {
-                q: "Minggu santai perfect sama ayam...",
-                options: [
-                    { text: "Sharing mimpi, rahasia, ngobrol dari hati", lang: "W" },
-                    { text: "Main game, masak, atau apapun bareng", lang: "T" },
-                    { text: "Saling surprise-in treats dan barang kecil", lang: "G" },
-                    { text: "Satu urus brunch, yang satu relax", lang: "A" },
-                    { text: "Rebahan seharian, meluk-melukan", lang: "P" }
-                ]
-            },
-            {
-                q: "Hal PALING romantis yang bisa dilakuin...",
-                options: [
-                    { text: "Nulis surat cinta yang curhat habis-habisan", lang: "W" },
-                    { text: "Surprise trip cuma berdua tanpa gangguan", lang: "T" },
-                    { text: "Bikin hadiah custom dari nol buat aku", lang: "G" },
-                    { text: "Diem-diem handle semua pas aku lagi susah", lang: "A" },
-                    { text: "Slow dance di dapur tengah malem", lang: "P" }
-                ]
-            }
-        ];
-
-        const LL_INFO = {
-            W: {
-                name: "Kata-kata Sayang",
-                emoji: "💬",
-                color: "words",
-                description: "Kamu tuh orangnya butuh dibilangin. Bukan lebay ya, tapi emang hati kamu paling bergetar kalo denger kata-kata tulus. Pujian, 'aku sayang kamu', chat manis random itu yang bikin kamu merasa dicintai banget.",
-                tips: "💡 Sering-sering kirim chat manis random, tinggalin notes, bilang 'aku bangga sama kamu', dan jangan pelit ngomong sayang."
-            },
-            T: {
-                name: "Quality Time",
-                emoji: "⏰",
-                color: "time",
-                description: "Buat kamu yang penting tuh HADIR. Nggak harus ngapa-ngapain, yang penting bareng dan fokus satu sama lain. HP disingkirin, mata ketemu mata. Kalo pasangan sibuk terus atau distracted, itu sakitnya tuh di sini 🫠",
-                tips: "💡 Bikin date tanpa HP, bikin ritual harian bareng, eye contact pas ngobrol, dan tunjukin kalo kamu prioritas nomor satu."
-            },
-            G: {
-                name: "Hadiah & Surprise",
-                emoji: "🎁",
-                color: "gifts",
-                description: "Ini BUKAN soal matre ya! Kamu tuh ngehargain EFFORT dan pikiran di balik hadiah. Benda 10rb yang dipilih pake cinta itu lebih berarti dari barang mahal tapi asal beli. Intinya 'aku mikirin kamu'.",
-                tips: "💡 Inget hal kecil yang dia pernah sebut pengen, surprise dengan barang random, dan yang penting tuh 'aku liat ini terus inget kamu'."
-            },
-            A: {
-                name: "Tindakan Nyata",
-                emoji: "🛠️",
-                color: "service",
-                description: "Kamu percaya sama pepatah actions speak louder than words. Kalo pasangan bantuin tanpa diminta, urus-urusin, ringanin beban itu tuh love language kamu banget. Nggak perlu banyak ngomong, lakuin aja.",
-                tips: "💡 Bantuin tanpa diminta, ambil alih kerjaan yang dia males, siapin kebutuhannya, dan tunjukin lewat perbuatan."
-            },
-            P: {
-                name: "Sentuhan Fisik",
-                emoji: "🤗",
-                color: "touch",
-                description: "Kamu orangnya butuh kedekatan fisik buat ngerasa connected. Pegang tangan, pelukan, cuddling, sentuhan kecil sepanjang hari itu semua bikin kamu merasa aman dan dicintai. Tanpa itu, berasa jauh banget.",
-                tips: "💡 Pegang tangan naturally, random hugs, cuddle pas nonton, sentuhan lembut pas ngobrol, dan selalu deket secara fisik."
-            }
-        };
-
-        const DAD_JOKES_ID = [
-            "Kenapa ayam nyebrang jalan? Karena mau ke seberang lah! 🐔",
-            "Bedanya kamu sama kucing? Kucing kaki 4, kamu bikin jatuh cinta! 😻",
-            "Kenapa matematika sedih? Kebanyakan masalah! 📐",
-            "Lebih berat mana 1 kg batu apa 1 kg kapas? Lebih berat rinduku padamu! 💕",
-            "Sayur apa yang romantis? Kol-mu bikin jatuh hati! 🥬",
-            "Ikan apa yang terbang? Ikan-tankah kamu mau jadi pacarku? 🐟",
-            "Bedanya kamu sama matahari? Matahari cuma 1, kamu satu-satunya! ☀️",
-            "Hewan apa yang romantis? Kupu-kupu, bikin perut geli! 🦋",
-            "Kenapa kucing suka TV? Karena ada mouse-nya! 🐱",
-            "Bedanya kopi sama kamu? Kopi bikin melek, kamu bikin deg-degan! ☕",
-            "Kenapa wifi bahagia? Karena selalu connect! 📶",
-            "Kenapa donat bolong? Kalo nggak bolong namanya roti! 🍩",
-            "Bedanya kamu sama bintang? Dua-duanya bikin nggak bisa tidur! ⭐",
-            "Bedanya kamu sama magnet? Magnet narik besi, kamu narik hatiku! 🧲",
-            "Kenapa ayam nggak punya HP? Udah punya kamu di hatinya! 🐓💕"
-        ];
-
-        let jokeIndex = 0;
-        let jokeInterval = null;
-        let clippyVisible = false;
-
-        function shuffleArray(arr) {
-            for (let i = arr.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-            }
-        }
-
-        function showClippy() {
-            document.getElementById('clippy-wrap').style.display = 'block';
-            initClippy3D();
-            shuffleArray(DAD_JOKES_ID);
-
-            jokeInterval = setInterval(() => {
-                if (!clippyVisible) showClippyJoke(DAD_JOKES_ID[jokeIndex++ % DAD_JOKES_ID.length]);
-            }, 25000);
-
-            setTimeout(() => showClippyJoke(DAD_JOKES_ID[jokeIndex++ % DAD_JOKES_ID.length]), 4000);
-        }
-
-        function showClippyJoke(text) {
-            document.getElementById('clippy-text').textContent = text;
-            document.getElementById('clippy-bubble').style.display = 'block';
-            clippyVisible = true;
-            setTimeout(() => { if (clippyVisible) hideClippyBubble(); }, 8000);
-        }
-
-        function toggleClippyBubble(e) {
-            if (e.target.closest('.clippy-close')) return;
-            if (clippyVisible) hideClippyBubble();
-            else showClippyJoke(DAD_JOKES_ID[jokeIndex++ % DAD_JOKES_ID.length]);
-        }
-
-        function hideClippyBubble() {
-            document.getElementById('clippy-bubble').style.display = 'none';
-            clippyVisible = false;
-        }
-
-        function showNotif(text, dur = 3000) {
-            document.querySelectorAll('.avatar-notification').forEach(n => n.remove());
-            const n = document.createElement('div');
-            n.className = 'avatar-notification';
-            n.innerHTML = `📎 ${text}`;
-            document.body.appendChild(n);
-            setTimeout(() => { n.style.opacity = '0'; n.style.transition = 'opacity 0.5s'; setTimeout(() => n.remove(), 500); }, dur);
-        }
-
-        let cScene, cCamera, cRenderer, cClippy, cClock;
-
-        function initClippy3D() {
-            const canvas = document.getElementById('clippy-canvas-3d');
-            const w = canvas.clientWidth || 80;
-            const h = canvas.clientHeight || 100;
-
-            cScene = new THREE.Scene();
-            cCamera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
-            cCamera.position.set(0, 0, 4);
-            cCamera.lookAt(0, 0, 0);
-
-            cRenderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-            cRenderer.setSize(w, h);
-            cRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            cRenderer.setClearColor(0x000000, 0);
-
-            cScene.add(new THREE.AmbientLight(0xffffff, 0.8));
-            const dir = new THREE.DirectionalLight(0xffffff, 0.6);
-            dir.position.set(2, 3, 3);
-            cScene.add(dir);
-
-            cClippy = new THREE.Group();
-
-            const curve = new THREE.CatmullRomCurve3([
-                new THREE.Vector3( 0.0, -0.6, 0 ),
-                new THREE.Vector3( 0.4, -0.6, 0 ),
-                new THREE.Vector3( 0.4,  0.5, 0 ),
-                new THREE.Vector3( 0.0,  0.7, 0 ),
-                new THREE.Vector3(-0.4,  0.5, 0 ),
-                new THREE.Vector3(-0.4, -0.8, 0 ),
-                new THREE.Vector3( 0.0, -1.0, 0 ),
-                new THREE.Vector3( 0.6, -0.8, 0 ),
-                new THREE.Vector3( 0.6,  0.6, 0 ),
-            ], false, 'catmullrom', 0.5);
-
-            const tubeGeom = new THREE.TubeGeometry(curve, 64, 0.08, 8, false);
-            const silverMat = new THREE.MeshStandardMaterial({color: 0xcccccc, metalness: 0.8, roughness: 0.2});
-            const clippyMesh = new THREE.Mesh(tubeGeom, silverMat);
-
-            const scleraGeom = new THREE.SphereGeometry(0.12, 16, 16);
-            const scleraMat = new THREE.MeshBasicMaterial({color: 0xffffff});
-            
-            const scleraL = new THREE.Mesh(scleraGeom, scleraMat);
-            scleraL.position.set(0.2, 0.55, 0.09);
-            scleraL.scale.set(1, 1.2, 0.4);
-
-            const scleraR = new THREE.Mesh(scleraGeom, scleraMat);
-            scleraR.position.set(-0.2, 0.55, 0.09);
-            scleraR.scale.set(1, 1.2, 0.4);
-
-            const pupilGeom = new THREE.SphereGeometry(0.045, 16, 16);
-            const pupilMat = new THREE.MeshBasicMaterial({color: 0x000000});
-
-            const pupilL = new THREE.Mesh(pupilGeom, pupilMat);
-            pupilL.position.set(0.2, 0.55, 0.15);
-
-            const pupilR = new THREE.Mesh(pupilGeom, pupilMat);
-            pupilR.position.set(-0.2, 0.55, 0.15);
-
-            // 3D Heart Asset
-            const heartShape = new THREE.Shape();
-            heartShape.moveTo(0, 0);
-            heartShape.bezierCurveTo(0, 0, -0.05, -0.12, -0.14, -0.12);
-            heartShape.bezierCurveTo(-0.24, -0.12, -0.24, 0, -0.24, 0);
-            heartShape.bezierCurveTo(-0.24, 0.08, -0.12, 0.17, 0, 0.24);
-            heartShape.bezierCurveTo(0.12, 0.17, 0.24, 0.08, 0.24, 0);
-            heartShape.bezierCurveTo(0.24, 0, 0.24, -0.12, 0.14, -0.12);
-            heartShape.bezierCurveTo(0.05, -0.12, 0, 0, 0, 0);
-
-            const heartExtrude = new THREE.ExtrudeGeometry(heartShape, { depth: 0.05, bevelEnabled: true, bevelThickness: 0.02, bevelSize: 0.02, bevelSegments: 2 });
-            const heartMat3D = new THREE.MeshStandardMaterial({ color: 0xff3355, roughness: 0.4 });
-            const heartMesh = new THREE.Mesh(heartExtrude, heartMat3D);
-            heartMesh.position.set(0.4, 0.1, 0.2);
-            heartMesh.rotation.z = Math.PI;
-            heartMesh.scale.set(0.6, 0.6, 0.6);
-            heartMesh.name = 'clippyHeart';
-
-            cClippy.add(clippyMesh, scleraL, scleraR, pupilL, pupilR, heartMesh);
-            cScene.add(cClippy);
-
-            cClock = new THREE.Clock();
-            animateClippy();
-        }
-
-        function animateClippy() {
-            requestAnimationFrame(animateClippy);
-            if (!cClippy || !cRenderer) return;
-
-            const t = cClock.getElapsedTime();
-            cClippy.position.y = Math.sin(t * 1.5) * 0.1;
-            cClippy.rotation.y = Math.sin(t * 0.6) * 0.2;
-            cClippy.rotation.z = Math.sin(t * 0.8) * 0.05;
-
-            cClippy.traverse(child => {
-                if (child.name === 'clippyHeart') {
-                    child.position.y = 0.1 + Math.sin(t * 3) * 0.05;
-                    child.rotation.y = Math.sin(t * 2) * 0.2;
-                    const s = 0.6 + Math.sin(t * 4) * 0.05;
-                    child.scale.set(s, s, s);
-                }
-            });
-
-            cRenderer.render(cScene, cCamera);
-        }
-
-        let collectedData = {
-            timestamp: '', love_language_scores: {}, love_language_primary: '',
-            food_answer: '', music_answer: '', year_want: '', year_expect: '',
-            romantic_thing: '', movie_answer: '', make_like_more: '', good_boy: '',
-            time_spent: 0
-        };
-        let sessionStart = Date.now();
-
-        const SCENES = ['boot','loveLanguage','llResult','foodQuestion','musicQuestion','yearWant','yearExpect','romanticThing','movieDate','makeLikeMore','goodBoy','finale'];
-        let currentScene = 0, llIndex = 0, llScores = {W:0,T:0,G:0,A:0,P:0};
-
-        const bootLines = [
-            { text: "LOVE_SYSTEM BIOS v14.02.25", delay: 0 },
-            { text: "Copyright (c) 2025 HeartSoft Inc.", delay: 300 },
-            { text: "", delay: 400 },
-            { text: "Loading modules................ OK", delay: 600 },
-            { text: "Loading romance.dll............... OK", delay: 900 },
-            { text: "Target Search....................... FOUND 💕", delay: 1200, class: "love" },
-            { text: "", delay: 1500 },
-            { text: "[ TARGET DETECTED ]", delay: 1700, class: "love" },
-            { text: `Target: ${CONFIG.herName}`, delay: 2000, class: "highlight" },
-            { text: "Love Level: OVERFLOW ERROR", delay: 2300, class: "love" },
-            { text: "Status: IN LOVE 🥰", delay: 2600, class: "love" },
-            { text: "", delay: 2900 },
-            { text: "Authentication required...", delay: 3100, class: "highlight" },
-        ];
-
-        function runBoot() {
-            const el = document.getElementById('boot-text');
-            bootLines.forEach((line, i) => {
-                setTimeout(() => {
-                    const d = document.createElement('div');
-                    d.innerHTML = line.class ? `<span class="${line.class}">${line.text}</span>` : line.text || '&nbsp;';
-                    el.appendChild(d);
-                    if (i === bootLines.length - 1) {
-                        setTimeout(() => {
-                            document.getElementById('password-section').style.display = 'block';
-                            document.getElementById('password-input').focus();
-                        }, 500);
-                    }
-                }, line.delay);
-            });
-        }
-
-        function checkPassword() {
-            const input = document.getElementById('password-input').value.trim();
-            const error = document.getElementById('password-error');
-            const valid = ["12/03/2022", "12/3/2022", "12-03-2022", "12-3-2022", "12.03.2022", "12.3.2022"];
-
-            if (valid.includes(input)) {
-                error.style.color = '#00ff00';
-                error.textContent = 'ACCESS GRANTED 💕';
-                setTimeout(() => {
-                    document.getElementById('boot-screen').style.display = 'none';
-                    document.getElementById('taskbar').style.display = 'flex';
-                    document.getElementById('ui').style.display = 'flex';
-                    currentScene = 1;
-                    renderScene();
-                    startClock();
-                    startHearts();
-                    spawnParticles();
-                    showClippy();
-                }, 1200);
-            } else {
-                error.style.color = '#ff4444';
-                error.textContent = 'Incorrect! Try again 😤';
-                document.getElementById('password-input').value = '';
-                document.getElementById('password-input').focus();
-            }
-        }
-
-        document.getElementById('password-input').addEventListener('keypress', e => { if (e.key === 'Enter') checkPassword(); });
-
-        function renderScene() {
-            const content = document.getElementById('win-content');
-            const title = document.getElementById('win-title');
-            const taskTitle = document.getElementById('taskbar-title');
-            const win = document.getElementById('main-window');
-            win.style.animation = 'none'; win.offsetHeight;
-            win.style.animation = 'pop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-
-            moveCamera();
-
-            switch (SCENES[currentScene]) {
-                case 'loveLanguage':
-                    title.textContent = '💕 Love_Language.exe';
-                    taskTitle.textContent = 'Love_Language.exe';
-                    llIndex = 0; llScores = {W:0,T:0,G:0,A:0,P:0};
-                    renderLLQ();
-                    break;
-
-                case 'llResult': renderLLResult(); break;
-
-                case 'foodQuestion':
-                    title.textContent = '🍔 Question.exe';
-                    taskTitle.textContent = 'Favorite_Food.exe';
-                    content.innerHTML = `<div class="scene-transition">
-                        <div style="font-size:1.5rem;color:var(--pink);margin-bottom:5px">🤔</div>
-                        <div style="font-size:clamp(1.1rem,3.5vw,1.4rem);color:var(--navy);margin-bottom:15px">
-                            Menurut kamu, ayam paling suka makan apa?
-                        </div>
-                        <button class="option-card" onclick="ansFood(this,'Sushi')">🍣 Sushi</button>
-                        <button class="option-card" onclick="ansFood(this,'Pizza')">🍕 Pizza</button>
-                        <button class="option-card" onclick="ansFood(this,'Nasi Goreng')">🍛 Nasi Goreng</button>
-                        <button class="option-card" onclick="ansFood(this,'Es Krim')">🍦 Es Krim</button>
-                        <button class="option-card" onclick="ansFood(this,'Bukan satupun')" style="border-color:var(--pink)">❌ Bukan satupun</button>
-                    </div>`;
-                    break;
-
-                case 'musicQuestion':
-                    title.textContent = '🎵 Music.exe';
-                    taskTitle.textContent = 'Favorite_Music.exe';
-                    content.innerHTML = `<div class="scene-transition">
-                        <div style="font-size:1.5rem;color:var(--pink);margin-bottom:5px">🎧</div>
-                        <div style="font-size:clamp(1.1rem,3.5vw,1.4rem);color:var(--navy);margin-bottom:8px">
-                            Musik apa sih yang ayam suka?
-                        </div>
-                        <div class="music-option" onclick="ansMusic(this, 'Joji - Like You Do', false)">
-                            <div class="song-info">
-                                <div class="song-title">🎵 Like You Do</div>
-                                <div class="song-artist">Joji</div>
-                            </div>
-                        </div>
-                        <div class="music-option" onclick="ansMusic(this, 'Barasuara - Pancarona', false)">
-                            <div class="song-info">
-                                <div class="song-title">🎸 Pancarona</div>
-                                <div class="song-artist">Barasuara</div>
-                            </div>
-                        </div>
-                        <div class="music-option" onclick="ansMusic(this, 'ILLIT - Magnetic', false)">
-                            <div class="song-info">
-                                <div class="song-title">💫 Magnetic</div>
-                                <div class="song-artist">ILLIT</div>
-                            </div>
-                        </div>
-                        <div class="music-option" onclick="ansMusic(this, 'Ayam - Bebek Kalau Ngambek', true)">
-                            <div class="song-info">
-                                <div class="song-title">✨ Bebek Kalau Ngambek</div>
-                                <div class="song-artist">Ayam</div>
-                            </div>
-                        </div>
-                    </div>`;
-                    break;
-
-                case 'yearWant':
-                    title.textContent = '🌟 Hope.exe';
-                    taskTitle.textContent = 'Hope.exe';
-                    content.innerHTML = `<div class="scene-transition">
-                        <div style="font-size:2rem;margin-bottom:5px">🌟</div>
-                        <div style="font-size:clamp(1.1rem,3.5vw,1.4rem);color:var(--navy);margin-bottom:8px">
-                            Tahun ini kamu pengen kita ngapain aja?
-                        </div>
-                        <textarea class="input-area" id="yearWantInput" placeholder="Aku pengen kita... 💕"></textarea>
-                        <div id="yearWantStatus" style="min-height:25px;color:var(--pink);margin-top:5px"></div>
-                        <button class="btn btn-pink" onclick="saveYearWant()">Save 💕</button>
-                    </div>`;
-                    break;
-
-                case 'yearExpect':
-                    title.textContent = '💭 Expectation.exe';
-                    taskTitle.textContent = 'Expectation.exe';
-                    content.innerHTML = `<div class="scene-transition">
-                        <div style="font-size:2rem;margin-bottom:5px">💭</div>
-                        <div style="font-size:clamp(1.1rem,3.5vw,1.4rem);color:var(--navy);margin-bottom:8px">
-                            Kamu harapin apa dari ayam tahun ini?
-                        </div>
-                        <textarea class="input-area" id="yearExpectInput" placeholder="Aku berharap ayam... 🥺"></textarea>
-                        <div id="yearExpectStatus" style="min-height:25px;color:var(--pink);margin-top:5px"></div>
-                        <button class="btn btn-pink" onclick="saveYearExpect()">Save 💕</button>
-                    </div>`;
-                    break;
-
-                case 'romanticThing':
-                    title.textContent = '💕 Romance.exe';
-                    taskTitle.textContent = 'Romance.exe';
-                    content.innerHTML = `<div class="scene-transition">
-                        <div style="font-size:2rem;margin-bottom:5px">💕</div>
-                        <div style="font-size:clamp(1.1rem,3.5vw,1.4rem);color:var(--navy);margin-bottom:8px">
-                            Hal paling romantis yang ayam pernah lakuin apa?
-                        </div>
-                        <textarea class="input-area" id="romanticInput" placeholder="Waktu itu ayam... 🥰"></textarea>
-                        <div id="romanticStatus" style="min-height:25px;color:var(--pink);margin-top:5px"></div>
-                        <button class="btn btn-pink" onclick="saveRomantic()">Save 💕</button>
-                    </div>`;
-                    break;
-
-                case 'movieDate':
-                    title.textContent = '🎬 Movie.exe';
-                    taskTitle.textContent = 'Movie_Date.exe';
-                    content.innerHTML = `<div class="scene-transition">
-                        <div style="font-size:2rem;margin-bottom:5px">🎬</div>
-                        <div style="font-size:clamp(1.1rem,3.5vw,1.4rem);color:var(--navy);margin-bottom:15px">
-                            Nonton date! Mau nonton apa nih?
-                        </div>
-                        <button class="movie-option" onclick="ansMovie(this,'Iron Lung')">
-                            <div class="movie-title">😱 Iron Lung</div>
-                            <div class="movie-genre">Sci-Fi / Horror</div>
-                        </button>
-                        <button class="movie-option" onclick="ansMovie(this,'Sore')">
-                            <div class="movie-title">🌅 Sore</div>
-                            <div class="movie-genre">Romance / Drama</div>
-                        </button>
-                        <button class="movie-option" onclick="ansMovie(this,'Marathon Anime')">
-                            <div class="movie-title">🎌 Marathon Anime</div>
-                            <div class="movie-genre">Animasi</div>
-                        </button>
-                        <button class="movie-option" onclick="ansMovie(this,'Nonton Kamu')">
-                            <div class="movie-title">💕 Nonton Kamu</div>
-                            <div class="movie-genre">Romance / Real Life</div>
-                        </button>
-                    </div>`;
-                    break;
-
-                case 'makeLikeMore':
-                    title.textContent = '🥺 Improve.exe';
-                    taskTitle.textContent = 'Improve.exe';
-                    content.innerHTML = `<div class="scene-transition">
-                        <div style="font-size:2rem;margin-bottom:5px">🥺</div>
-                        <div style="font-size:clamp(1.1rem,3.5vw,1.4rem);color:var(--navy);margin-bottom:8px">
-                            Ayam harus ngapain biar kamu makin suka?
-                        </div>
-                        <textarea class="input-area" id="likeMoreInput" placeholder="Aku pengen ayam... 💕"></textarea>
-                        <div id="likeMoreStatus" style="min-height:25px;color:var(--pink);margin-top:5px"></div>
-                        <button class="btn btn-pink" onclick="saveLikeMore()">Save 💕</button>
-                    </div>`;
-                    break;
-
-                case 'goodBoy':
-                    title.textContent = '🐶 Validation.exe';
-                    taskTitle.textContent = 'Validation.exe';
-                    content.innerHTML = `<div class="scene-transition">
-                        <div style="font-size:3rem;margin-bottom:10px">🥺</div>
-                        <div style="font-size:clamp(1.3rem,4vw,1.6rem);color:var(--navy);margin-bottom:10px">
-                            Ayam anak baik nggak?
-                        </div>
-                        <div class="yn-btn-row">
-                            <button class="yn-yes" onclick="ansGoodBoy('Iya dong! 💕')">IYA! 💕</button>
-                            <button class="yn-yes" onclick="ansGoodBoy('Paling baik! 🥰')">PALING! 🥰</button>
-                        </div>
-                        <div class="yn-container" id="no-container">
-                            <button class="yn-no" id="btn-no" 
-                                onmouseenter="dodgeNo()" 
-                                ontouchstart="dodgeNo()"
-                                onclick="dodgeNo()">Nggak 😤</button>
-                        </div>
-                        <div id="goodBoyReact" style="font-size:clamp(1rem,3vw,1.3rem);color:var(--pink);min-height:30px;margin-top:10px"></div>
-                    </div>`;
-                    setTimeout(() => {
-                        const btn = document.getElementById('btn-no');
-                        const container = document.getElementById('no-container');
-                        if (btn && container) {
-                            btn.style.left = (container.offsetWidth / 2 - btn.offsetWidth / 2) + 'px';
-                            btn.style.top = '60px';
-                        }
-                    }, 100);
-                    break;
-
-                case 'finale': renderFinale(); break;
-            }
-        }
-
-        function nextScene() {
-            if (currentScene < SCENES.length - 1) { currentScene++; renderScene(); }
-        }
-
-        function renderLLQ() {
-            const content = document.getElementById('win-content');
-            const total = LL_QUIZ.length;
-
-            if (llIndex >= total) {
-                const sum = Object.values(llScores).reduce((a,b) => a+b, 0) || 1;
-                const pcts = {};
-                for (const k in llScores) pcts[k] = Math.round((llScores[k]/sum)*100);
-                collectedData.love_language_scores = pcts;
-                const sorted = Object.entries(pcts).sort((a,b) => b[1]-a[1]);
-                collectedData.love_language_primary = LL_INFO[sorted[0][0]].name;
-                currentScene = SCENES.indexOf('llResult');
-                renderScene();
-                return;
-            }
-
-            const q = LL_QUIZ[llIndex];
-            const progress = (llIndex/total)*100;
-            const shuffled = [...q.options].sort(() => Math.random()-0.5);
-
-            content.innerHTML = `<div class="scene-transition">
-                <div style="font-size:clamp(0.8rem,2.2vw,1rem);color:#888;margin-bottom:5px">
-                    💕 Quiz Bahasa Cinta - ${llIndex+1} dari ${total}
-                </div>
-                <div class="ll-progress"><div class="ll-progress-fill" style="width:${progress}%"></div></div>
-                <div class="ll-question">${q.q}</div>
-                ${shuffled.map(o => `<button class="ll-option" onclick="ansLL('${o.lang}')">${o.text}</button>`).join('')}
-            </div>`;
-        }
-
-        function ansLL(lang) { llScores[lang]++; llIndex++; renderLLQ(); }
-
-        function renderLLResult() {
-            const content = document.getElementById('win-content');
-            const title = document.getElementById('win-title');
-            const taskTitle = document.getElementById('taskbar-title');
-            title.textContent = '💕 Result.exe';
-            taskTitle.textContent = 'Analysis.exe';
-
-            const pcts = collectedData.love_language_scores;
-            const sorted = Object.entries(pcts).sort((a,b) => b[1]-a[1]);
-            const [primary, secondary] = [sorted[0][0], sorted[1][0]];
-            const pInfo = LL_INFO[primary], sInfo = LL_INFO[secondary];
-
-            const bars = sorted.map(([k,p]) => {
-                const info = LL_INFO[k];
-                return `<div class="ll-result-bar-wrap">
-                    <div class="ll-result-header"><span>${info.emoji} ${info.name}</span><span><strong>${p}%</strong></span></div>
-                    <div class="ll-result-track"><div class="ll-result-fill ${info.color}" id="ll-bar-${k}"></div></div>
-                </div>`;
-            }).join('');
-
-            content.innerHTML = `<div class="scene-transition">
-                <div style="font-size:clamp(1.1rem,3.5vw,1.4rem);color:var(--pink);margin-bottom:5px">💕 Bahasa Cinta Kamu 💕</div>
-                <div style="font-size:clamp(0.75rem,2vw,0.9rem);color:#999;margin-bottom:12px">Berdasarkan 5 Love Languages Dr. Gary Chapman</div>
-                <div style="font-size:clamp(1.1rem,3.5vw,1.5rem);color:var(--navy);margin:8px 0">${pInfo.emoji} Utama: ${pInfo.name}</div>
-                <div style="font-size:clamp(0.9rem,2.5vw,1.1rem);color:#777;margin-bottom:12px">${sInfo.emoji} Kedua: ${sInfo.name}</div>
-                ${bars}
-                <div class="ll-description">
-                    <strong>🔍 Analisis:</strong><br><br>
-                    <strong>${pInfo.emoji} ${pInfo.name} (${pcts[primary]}%)</strong><br>${pInfo.description}<br><br>${pInfo.tips}<br><br>
-                    <strong>${sInfo.emoji} ${sInfo.name} (${pcts[secondary]}%)</strong><br>${sInfo.description}<br><br>
-                    <strong>💕 Artinya buat kita:</strong><br>
-                    Sekarang ayam tau gimana caranya sayangin kamu yang bener. Hati kamu ngomongnya pake 
-                    <em>${pInfo.name.toLowerCase()}</em>, dan ayam janji bakal isi tiap hari pake itu. Kamu layak disayang sesuai cara yang hati kamu butuh. 💕
-                </div>
-                <button class="btn btn-pink" onclick="nextScene()">Lanjut 💕</button>
-            </div>`;
-
-            setTimeout(() => sorted.forEach(([k,p]) => { const b = document.getElementById(`ll-bar-${k}`); if(b) b.style.width = p+'%'; }), 400);
-        }
-
-        function disableAll(selector) {
-            document.querySelectorAll(selector).forEach(b => { b.onclick = null; b.style.opacity = '0.5'; b.style.cursor = 'default'; b.style.pointerEvents = 'none'; });
-        }
-
-        function ansFood(btn, ans) {
-            collectedData.food_answer = ans;
-            disableAll('.option-card');
-            btn.style.opacity = '1'; btn.classList.add('selected'); btn.style.pointerEvents = 'auto';
-
-            if (ans === 'Bukan satupun') {
-                btn.style.background = '#d4edda';
-                setTimeout(() => { showNotif("Ayam sukanya KAMU lah! 💕😍 Kamu tuh makanan favorit ayam!", 4000); confetti({particleCount:50,spread:60,origin:{y:0.6}}); }, 500);
-            } else {
-                setTimeout(() => showNotif("Hmm sebenernya sih... ayam sukanya KAMU! 😏💕", 4000), 500);
-            }
-            setTimeout(nextScene, 3500);
-        }
-
-        function ansMusic(btn, ans, correct) {
-            collectedData.music_answer = ans;
-            disableAll('.music-option');
-            btn.style.opacity = '1'; btn.style.border = '2px solid #1DB954'; btn.style.background = '#1a3a1a'; btn.style.pointerEvents = 'auto';
-
-            if (correct) {
-                new Audio('bebek.ogg').play().catch(e => console.log('Audio playback failed', e));
-                setTimeout(() => {
-                    confetti({particleCount:120,spread:80,origin:{y:0.5},colors:['#1DB954','#ff6b9d','#ffd700','#00f2fe']});
-                    showNotif("Correct! 💕", 4000);
-                }, 300);
-            } else {
-                setTimeout(() => { showNotif("Incorrect 😅", 3500); }, 300);
-            }
-            setTimeout(nextScene, 4000);
-        }
-
-        function saveYearWant() {
-            const v = document.getElementById('yearWantInput')?.value.trim();
-            if (!v) { document.getElementById('yearWantStatus').textContent = 'Tulis sesuatu dong! 💕'; return; }
-            collectedData.year_want = v;
-            document.getElementById('yearWantStatus').textContent = 'Noted! Ayam wujudin ya! 💕';
-            setTimeout(nextScene, 1000);
-        }
-
-        function saveYearExpect() {
-            const v = document.getElementById('yearExpectInput')?.value.trim();
-            if (!v) { document.getElementById('yearExpectStatus').textContent = 'Cerita dong! 🥺'; return; }
-            collectedData.year_expect = v;
-            document.getElementById('yearExpectStatus').textContent = 'Ayam janji usaha! 💕';
-            setTimeout(nextScene, 1000);
-        }
-
-        function saveRomantic() {
-            const v = document.getElementById('romanticInput')?.value.trim();
-            if (!v) { document.getElementById('romanticStatus').textContent = 'Ceritain dong! 🥰'; return; }
-            collectedData.romantic_thing = v;
-            document.getElementById('romanticStatus').textContent = 'Sip! Ayam lakuin lagi bentar ya! 💕';
-            showNotif("Aww sweet banget! 🥰", 3000);
-            setTimeout(nextScene, 1500);
-        }
-
-        function ansMovie(btn, ans) {
-            collectedData.movie_answer = ans;
-            disableAll('.movie-option');
-            btn.style.opacity = '1'; btn.style.background = '#ffe0e8'; btn.style.border = '2px solid var(--pink)'; btn.style.pointerEvents = 'auto';
-
-            const r = {
-                'Iron Lung': "Horror date! 😱 Nanti peluk ayam ya kalo takut! 💕",
-                'Sore': "Romantis! 🌅 Siap-siap nangis bareng ya! 💕",
-                'Marathon Anime': "Begadang anime! 🎌 Siapin snack banyak! 💕",
-                'Nonton Kamu': "Nonton ayam? 🥺 Kamu tuh paling sweet! 💕"
-            };
-            setTimeout(() => { showNotif(r[ans], 3500); confetti({particleCount:30,spread:50,origin:{y:0.7}}); }, 500);
-            setTimeout(nextScene, 3500);
-        }
-
-        function saveLikeMore() {
-            const v = document.getElementById('likeMoreInput')?.value.trim();
-            if (!v) { document.getElementById('likeMoreStatus').textContent = 'Ayo cerita! 💕'; return; }
-            collectedData.make_like_more = v;
-            document.getElementById('likeMoreStatus').textContent = 'Challenge accepted! 💪💕';
-            setTimeout(nextScene, 1000);
-        }
-
-        function ansGoodBoy(ans) {
-            collectedData.good_boy = ans;
-            document.getElementById('goodBoyReact').textContent = ans;
-            confetti({particleCount:100,spread:70,origin:{y:0.5},colors:['#ff6b9d','#ffd700','#ff9aa2','#b5ead7']});
-            showNotif("Ya iyalah ayam anak baik! Paling baik! 🐶💕", 3000);
-            setTimeout(nextScene, 3000);
-        }
-
-        function dodgeNo() {
-            const btn = document.getElementById('btn-no');
-            const container = document.getElementById('no-container');
-            if (!btn || !container) return;
-
-            const cw = container.offsetWidth;
-            const ch = container.offsetHeight;
-            const bw = btn.offsetWidth;
-            const bh = btn.offsetHeight;
-
-            let newX = Math.random() * (cw - bw);
-            let newY = Math.random() * (ch - bh);
-
-            newX = Math.max(0, Math.min(newX, cw - bw));
-            newY = Math.max(0, Math.min(newY, ch - bh));
-
-            btn.style.left = newX + 'px';
-            btn.style.top = newY + 'px';
-            btn.style.transition = 'none';
-        }
-
-        function renderFinale() {
-            const content = document.getElementById('win-content');
-            document.getElementById('win-title').textContent = '🎁 Report.exe';
-            document.getElementById('taskbar-title').textContent = 'Report.exe';
-
-            const s = collectedData.love_language_scores;
-
-            const dashHTML = `
-                <div class="scene-transition">
-                    <div id="capture-dashboard" style="background: white; padding: 40px; border: 4px solid var(--pink); text-align: left; color: #333; font-family: 'VT323', monospace; width: 100%; box-sizing: border-box; font-size: 1.4rem;">
-                        <h2 style="text-align: center; color: var(--pink); border-bottom: 3px dashed #ccc; padding-bottom: 15px; margin-bottom: 25px; font-size: 2.2rem;">SYSTEM REPORT</h2>
-                        
-                        <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 30px;">
-                            <h3 style="color: var(--navy); margin-bottom: 15px; font-size: 1.8rem;">💕 Love Language Analysis 💕</h3>
-                            <div style="width: 300px; height: 300px;">
-                                <canvas id="llChart"></canvas>
-                            </div>
-                        </div>
-
-                        <div style="font-size: 1.4rem; line-height: 1.8; margin-bottom: 30px;">
-                            <p style="margin-bottom: 10px;"><strong>🎯 Target:</strong> ${CONFIG.herName}</p>
-                            <p style="margin-bottom: 10px;"><strong>💕 Primary Language:</strong> ${collectedData.love_language_primary}</p>
-                            <p style="margin-bottom: 10px;"><strong>🍔 Favorite Food:</strong> ${collectedData.food_answer}</p>
-                            <p style="margin-bottom: 10px;"><strong>🎧 Music Choice:</strong> ${collectedData.music_answer}</p>
-                            <p style="margin-bottom: 10px;"><strong>🌟 Year Want:</strong> ${collectedData.year_want}</p>
-                            <p style="margin-bottom: 10px;"><strong>💭 Year Expect:</strong> ${collectedData.year_expect}</p>
-                            <p style="margin-bottom: 10px;"><strong>💕 Romantic Memory:</strong> ${collectedData.romantic_thing}</p>
-                            <p style="margin-bottom: 10px;"><strong>🎬 Movie Date:</strong> ${collectedData.movie_answer}</p>
-                            <p style="margin-bottom: 10px;"><strong>🥺 Improvement:</strong> ${collectedData.make_like_more}</p>
-                            <p style="margin-bottom: 10px;"><strong>🐶 Validation:</strong> ${collectedData.good_boy}</p>
-                        </div>
-
-                        <div style="text-align: center; margin-top: 30px; padding-top: 30px; border-top: 3px dashed #ccc;">
-                            <h3 style="color: var(--pink); margin-bottom: 15px; font-size: 1.8rem;">🎁 OFFICIAL VOUCHER 🎁</h3>
-                            <canvas id="qr-code"></canvas>
-                            <p style="font-size: 1.2rem; color: var(--navy); font-weight: bold; margin-top: 10px;">Tukarkan voucher ini untuk mendapatkan hadiah!</p>
-                            <p style="font-size: 1.1rem; color: #888; margin-top: 15px;">Generated: ${new Date().toLocaleString()}</p>
-                        </div>
-                    </div>
-                    <button class="btn btn-pink" style="margin-top: 25px; padding: 10px 25px; font-size: 1.4rem;" onclick="downloadDashboard()">📥 Download Report</button>
-                </div>
-            `;
-
-            content.innerHTML = dashHTML;
-
-            const ctx = document.getElementById('llChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['Words (W) 💬', 'Time (T) ⏰', 'Gifts (G) 🎁', 'Service (A) 🛠️', 'Touch (P) 🤗'],
-                    datasets: [{
-                        data: [s.W || 0, s.T || 0, s.G || 0, s.A || 0, s.P || 0],
-                        backgroundColor: ['#667eea', '#f5576c', '#43e97b', '#4facfe', '#fee140'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    animation: false, 
-                    plugins: {
-                        legend: { position: 'bottom', labels: { font: { family: "'VT323', monospace", size: 16 } } }
-                    }
-                }
-            });
-
-            new QRious({
-                element: document.getElementById('qr-code'),
-                value: 'VOUCHER-LOVE-' + CONFIG.herName + '-' + Date.now(),
-                size: 200,
-                background: 'white',
-                foreground: '#000080'
-            });
-        }
-
-        function downloadDashboard() {
-            const element = document.getElementById('capture-dashboard');
-            html2canvas(element, {
-                scale: 2, 
-                backgroundColor: "#ffffff"
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'Love_System_Report.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            }).catch(err => {
-                console.error('Canvas rendering failed:', err);
-            });
-        }
-
-        function spawnHeart() {
-            const c = document.getElementById('floating-hearts');
-            const h = document.createElement('div');
-            h.className = 'float-heart';
-            h.textContent = ['💕','💖','💗','💓','❤️','🩷','🌸'][Math.floor(Math.random()*7)];
-            h.style.left = Math.random()*100+'%';
-            h.style.animationDuration = (3+Math.random()*3)+'s';
-            h.style.fontSize = (1+Math.random()*2)+'rem';
-            c.appendChild(h);
-            setTimeout(() => h.remove(), 7000);
-        }
-
-        function startHearts() { setInterval(spawnHeart, 3000); }
-
-        function spawnParticles() {
-            const c = document.getElementById('particles');
-            const n = window.innerWidth < 480 ? 15 : 30;
-            const cols = ['#ff9aa2','#ffb7b2','#b5ead7','#c7ceea'];
-            for (let i = 0; i < n; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.style.left = Math.random()*100+'%';
-                p.style.animationDelay = Math.random()*8+'s';
-                p.style.animationDuration = (6+Math.random()*6)+'s';
-                const sz = (2+Math.random()*4)+'px';
-                p.style.width = sz; p.style.height = sz;
-                p.style.background = cols[Math.floor(Math.random()*4)];
-                c.appendChild(p);
-            }
-        }
-
-        function startClock() {
-            function upd() { const t = new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',hour12:false}); document.getElementById('taskbar-clock').textContent = `💕 ${t}`; }
-            upd(); setInterval(upd, 1000);
-        }
-
-        const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0xffdae0, 0.035);
-        const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 300);
-        camera.position.z = 5;
-        const renderer = new THREE.WebGLRenderer({canvas:document.getElementById('world'),alpha:true,antialias:true});
-        renderer.setSize(innerWidth,innerHeight);
-        renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-
-        const hs = new THREE.Shape();
-        hs.moveTo(.5,.5); hs.bezierCurveTo(.5,.5,.4,0,0,0);
-        hs.bezierCurveTo(-.6,0,-.6,.7,-.6,.7);
-        hs.bezierCurveTo(-.6,1.1,-.3,1.54,.5,1.9);
-        hs.bezierCurveTo(1.2,1.54,1.6,1.1,1.6,.7);
-        hs.bezierCurveTo(1.6,.7,1.6,0,1,0);
-        hs.bezierCurveTo(.7,0,.5,.5,.5,.5);
-
-        const hg = new THREE.ExtrudeGeometry(hs,{depth:0.15,bevelEnabled:false});
-        const hc = [0xff9aa2,0xffb7b2,0xffdac1,0xb5ead7,0xc7ceea,0xff6b9d];
-        const hCount = innerWidth < 480 ? 120 : 250;
-
-        for (let i = 0; i < hCount; i++) {
-            const m = new THREE.MeshBasicMaterial({color:hc[Math.floor(Math.random()*hc.length)],wireframe:Math.random()>0.4});
-            const mesh = new THREE.Mesh(hg,m);
-            mesh.position.set((Math.random()-0.5)*25,(Math.random()-0.5)*25,-i*3);
-            mesh.rotation.z = Math.PI; mesh.rotation.x = Math.random()*0.5; mesh.rotation.y = Math.random()*0.5;
-            const s = 0.2+Math.random()*0.6; mesh.scale.set(s,s,s);
-            mesh.userData = {rs:(Math.random()-0.5)*0.015,fs:Math.random()*0.008+0.003,fo:Math.random()*Math.PI*2};
-            scene.add(mesh);
-        }
-
-        let targetZ = 5;
-        function moveCamera() { targetZ -= 35; }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            camera.position.z += (targetZ-camera.position.z)*0.025;
-            camera.rotation.z = Math.sin(Date.now()*0.00025)*0.03;
-            scene.children.forEach(c => {
-                if (c.userData?.rs) {
-                    c.rotation.y += c.userData.rs;
-                    c.position.y += Math.sin(Date.now()*c.userData.fs+c.userData.fo)*0.002;
-                }
-            });
-            renderer.render(scene,camera);
-        }
-        animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = innerWidth/innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(innerWidth,innerHeight);
-        });
-
-        runBoot();
-    </script>
 </body>
 </html>
