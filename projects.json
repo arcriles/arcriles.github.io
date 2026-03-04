@@ -251,6 +251,30 @@
         "Introducing CovidWHO API, a streamlined platform providing instant access to real-time COVID data directly from the World Health Organization (WHO). Tailored for efficiency and accuracy, this website serves as a reliable hub for users seeking up-to-date information on global COVID rates. With a user-friendly interface, CovidWHO API ensures that accessing critical pandemic data is both effortless and reliable."
       ]
     }
+  ],
+
+  "experience": [
+    {
+      "title": "Developer",
+      "company": "Sinarmas Agribusiness",
+      "period": "2024 - NOW",
+      "location": "Jakarta, Indonesia",
+      "achievements": "Full-stack development and maintenance. Architected secure cloud-based systems and APIs while implementing strict access control and encryption standards to protect critical enterprise data."
+    },
+    {
+      "title": "Pentester",
+      "company": "Independent Contractor",
+      "period": "2020 - 2024",
+      "location": "Remote",
+      "achievements": "Vulnerability assessments and auditing. Conducted comprehensive penetration testing on web applications and network infrastructures to identify, document, and remediate critical security flaws."
+    },
+    {
+      "title": "Bug Hunting",
+      "company": "Bug Bounty Program",
+      "period": "2019 - 2020",
+      "location": "Remote",
+      "achievements": "Critical vulnerability identification. Participated in various bug bounty programs, successfully discovering and reporting high-severity vulnerabilities in enterprise platforms through advanced auditing techniques."
+    }
   ]
 
 ,
