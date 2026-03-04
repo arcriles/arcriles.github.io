@@ -136,7 +136,7 @@
             display: grid;
             grid-template-columns: 1fr 1.2fr;
             gap: 6rem;
-            align-items: flex-start;
+            align-items: center;
         }
 
         .identity-col {
@@ -209,15 +209,24 @@
             transform: translateY(-2px);
         }
 
-        .timeline-container {
-            background: rgba(20, 20, 20, 0.4);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-main);
-            padding: 3rem;
-            width: 100%;
-        }
+.timeline-container {
+    background: rgba(20, 20, 20, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-main);
+    padding: 3rem;
+    width: 100%;
+    height: auto;
+    margin-top: -4rem; /* Optically lifts the timeline to match the left column */
+}
+
+/* For responsive design: reset the margin on smaller screens so it doesn't overlap */
+@media (max-width: 1024px) {
+    .timeline-container {
+        margin-top: 0;
+    }
+}
 
         .timeline-header {
             font-size: 0.95rem;
@@ -231,25 +240,41 @@
         }
 
         .timeline-item {
-            margin-bottom: 2rem;
+            padding-bottom: 2rem;
             padding-left: 1.5rem;
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 2px solid rgba(255, 255, 255, 0.15);
             position: relative;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .timeline-item:last-child {
-            margin-bottom: 0;
+            padding-bottom: 0;
+            border-left: 2px solid transparent;
+            border-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, transparent 100%) 1;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(8px);
         }
 
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -3px;
-            top: 8px;
-            width: 5px;
-            height: 5px;
-            background: var(--text-main);
+            left: -5px; 
+            top: 6px;
+            width: 8px;
+            height: 8px;
+            background: var(--bg-color);
+            border: 2px solid rgba(255, 255, 255, 0.5);
             border-radius: 50%;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .timeline-item:hover::before {
+            background: #ffffff;
+            border-color: #ffffff;
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
         }
 
         .time-date {
@@ -275,6 +300,23 @@
             margin-bottom: 0.5rem;
             font-style: italic;
             line-height: 1.4;
+        }
+
+        .timeline-year-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-year-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            color: #444;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            padding: 2px 8px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 4px;
+            display: inline-block;
         }
 
         #projects {
@@ -896,7 +938,6 @@
             bottom: 0;
             left: 0; 
             width: 100%; 
-            /* Invisible extra height to allow the text to scale up without clipping */
             height: 120px; 
             z-index: 998; 
             font-family: var(--font-main);
@@ -910,7 +951,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 35px; /* Updated Height */
+            height: 35px;
             background: #050505;
             border-top: 1px solid #333; 
             border-bottom: none;
@@ -924,7 +965,7 @@
         /* ADJUSTED BUMP POSITION */
         .skills-bump {
             position: absolute;
-            bottom: 35px; /* Sits on top of the 35px wrap */
+            bottom: 35px;
             left: 0; 
             background: #fff; 
             color: #000;
@@ -1062,7 +1103,7 @@
         /* SCROLL TOP BTN (Lowered Placement) */
         .scroll-top-btn {
             position: fixed;
-            bottom: 65px; /* Lowered to align with smaller bar */
+            bottom: 65px;
             right: 2rem;
             width: 45px;
             height: 45px;
@@ -1130,31 +1171,8 @@ I am a software developer who builds and maintains cloud-based systems with a st
                 </div>
 
                 <div class="timeline-container scroll-reveal" style="--delay: 200ms;">
-                    <div class="timeline-header">Experience</div>
-                    <div class="timeline-item scroll-reveal" style="--delay: 300ms;">
-                        <span class="time-date"
-                            style="font-size: 0.75rem; color: #666; display:block; margin-bottom:0.5rem;">2024 -
-                            NOW</span>
-                        <div class="role">Developer</div>
-                        <div class="company">Sinarmas Agribusiness</div>
-                        <div class="brief">Full-stack development and maintenance.</div>
-                    </div>
-                    <div class="timeline-item scroll-reveal" style="--delay: 450ms;">
-                        <span class="time-date"
-                            style="font-size: 0.75rem; color: #666; display:block; margin-bottom:0.5rem;">2020 -
-                            2024</span>
-                        <div class="role">Pentester</div>
-                        <div class="company">Independent Contractor</div>
-                        <div class="brief">Vulnerability assessments and auditing.</div>
-                    </div>
-                    <div class="timeline-item scroll-reveal" style="--delay: 600ms;">
-                        <span class="time-date"
-                            style="font-size: 0.75rem; color: #666; display:block; margin-bottom:0.5rem;">2019 -
-                            2020</span>
-                        <div class="role">Bug Hunting</div>
-                        <div class="company">Bug Bounty Program</div>
-                        <div class="brief">Critical vulnerability identification.</div>
-                    </div>
+                    <div class="timeline-header">Experience Timeline</div>
+                    <div id="timeline-list"><div style="color:#444; font-size:0.85rem;">Loading...</div></div>
                 </div>
             </div>
         </section>
@@ -1180,8 +1198,8 @@ I am a software developer who builds and maintains cloud-based systems with a st
                             A simple Conversation is all you needed. I am open to discussing security auditing,
                             development, and new opportunities.
                         </p>
-                        <a href="mailto:arcrilest@outlook.com" class="email-display">
-                            arcrilest@outlook.com
+                        <a href="/cdn-cgi/l/email-protection#a4c5d6c7d6cdc8c1d7d0e4cbd1d0c8cbcbcf8ac7cbc9" class="email-display">
+                            <span class="__cf_email__" data-cfemail="46273425342f2a233532062933322a29292d6825292b">[email&#160;protected]</span>
                         </a>
                     </div>
                 </div>
@@ -1289,7 +1307,7 @@ I am a software developer who builds and maintains cloud-based systems with a st
         <svg viewBox="0 0 24 24"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>
     </button>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // --- CIPHER ANIMATION LOGIC ---
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -1386,6 +1404,7 @@ I am a software developer who builds and maintains cloud-based systems with a st
                 skillsData = data.skills; 
 
                 renderProjects();
+                renderTimeline(data.experience);
                 renderSkillsTicker(); 
             } catch (error) {
                 console.error(error);
@@ -1439,7 +1458,6 @@ I am a software developer who builds and maintains cloud-based systems with a st
                     const skillName = e.currentTarget.getAttribute('data-skill').toUpperCase();
                     const details = skillInfo[skillName] || { usage: "General Development" };
                     
-                    // Removed FOUNDED line
                     tooltip.innerHTML = `<strong>${skillName}</strong><br><span style="color:#aaa; font-size:0.7em;">USAGE: ${details.usage}</span>`;
                     tooltip.style.opacity = '1';
                     updateTooltipPos(e.currentTarget);
@@ -1453,9 +1471,37 @@ I am a software developer who builds and maintains cloud-based systems with a st
 
         function updateTooltipPos(targetItem) {
             const rect = targetItem.getBoundingClientRect();
-            // Position above the item, centered horizontally
             tooltip.style.left = (rect.left + rect.width / 2) + 'px';
             tooltip.style.top = (rect.top - 25) + 'px'; 
+        }
+
+        function renderTimeline(experience) {
+            const list = document.getElementById('timeline-list');
+            if (!list || !experience || experience.length === 0) return;
+
+            let html = '';
+            experience.forEach((exp, pi) => {
+                const delay = pi * 100;
+                html += `
+                <div class="timeline-year-group">
+                    <div class="timeline-year-label">${exp.period}</div>
+                </div>
+                <div class="timeline-item scroll-reveal" style="--delay:${delay}ms;">
+                    <div class="role" style="font-size:0.95rem;">${exp.title}</div>
+                    <div class="company">${exp.company} — ${exp.location}</div>
+                    <div class="brief">${exp.achievements}</div>
+                </div>`;
+            });
+
+            list.innerHTML = html;
+
+            const fadeObserver = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) e.target.classList.add('is-visible');
+                    else e.target.classList.remove('is-visible');
+                });
+            }, { threshold: 0.05 });
+            list.querySelectorAll('.scroll-reveal').forEach(el => fadeObserver.observe(el));
         }
 
         function renderProjects() {
@@ -1713,9 +1759,12 @@ I am a software developer who builds and maintains cloud-based systems with a st
         });
 
         scrollTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
+
     </script>
 </body>
-
 </html>
