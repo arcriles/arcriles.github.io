@@ -129,7 +129,7 @@
             flex-direction: column;
             justify-content: flex-start;
             padding-top: 20vh;
-            padding-bottom: 10rem;
+            padding-bottom: 5rem;
         }
 
         .about-wrapper {
@@ -209,24 +209,23 @@
             transform: translateY(-2px);
         }
 
-.timeline-container {
-    background: rgba(20, 20, 20, 0.4);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-main);
-    padding: 3rem;
-    width: 100%;
-    height: auto;
-    margin-top: -4rem; /* Optically lifts the timeline to match the left column */
-}
+        .timeline-container {
+            background: rgba(20, 20, 20, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-main);
+            padding: 3rem;
+            width: 100%;
+            height: auto;
+            margin-top: -4rem; 
+        }
 
-/* For responsive design: reset the margin on smaller screens so it doesn't overlap */
-@media (max-width: 1024px) {
-    .timeline-container {
-        margin-top: 0;
-    }
-}
+        @media (max-width: 1024px) {
+            .timeline-container {
+                margin-top: 0;
+            }
+        }
 
         .timeline-header {
             font-size: 0.95rem;
@@ -319,8 +318,78 @@
             display: inline-block;
         }
 
+        /* Stats Grid Styles */
+        #stats {
+            padding: 4rem 0 6rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            background: rgba(20, 20, 20, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-main);
+            padding: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            border-right: 1px solid var(--border);
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+        }
+
+        .stat-num {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin: 0;
+            color: #fff;
+            letter-spacing: -0.03em;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-top: 1rem;
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+
+        @media (max-width: 900px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 3rem 1rem;
+            }
+            .stat-item:nth-child(2) {
+                border-right: none;
+            }
+            .stat-item {
+                border-right: 1px solid var(--border);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .stat-item {
+                border-right: none;
+            }
+        }
+
         #projects {
-            padding: 10rem 0;
+            padding: 6rem 0 10rem 0;
         }
 
         .section-header {
@@ -932,7 +1001,6 @@
             }
         }
 
-        /* --- UPDATED SLIMMER SKILLS DOCK --- */
         #skills-ticker {
             position: fixed;
             bottom: 0;
@@ -945,7 +1013,6 @@
             pointer-events: none; 
         }
 
-        /* SLIMMER BAR (35px) */
         .ticker-wrap {
             position: absolute;
             bottom: 0;
@@ -962,7 +1029,6 @@
             box-shadow: 0 -10px 40px rgba(0,0,0,0.9);
         }
 
-        /* ADJUSTED BUMP POSITION */
         .skills-bump {
             position: absolute;
             bottom: 35px;
@@ -1047,7 +1113,6 @@
             transition: fill 0.3s;
         }
 
-        /* --- GLASS STYLE HOVER --- */
         .ticker-item:hover {
             color: #fff;
             transform: scale(1.8) translateY(-15px); 
@@ -1065,7 +1130,6 @@
             fill: #fff;
         }
 
-        /* --- GLASS STYLE TOOLTIP --- */
         #cursor-tooltip {
             position: fixed;
             background: rgba(10, 10, 10, 0.85);
@@ -1100,7 +1164,6 @@
             border-color: rgba(10, 10, 10, 0.85) transparent transparent transparent;
         }
 
-        /* SCROLL TOP BTN (Lowered Placement) */
         .scroll-top-btn {
             position: fixed;
             bottom: 65px;
@@ -1177,6 +1240,27 @@ I am a software developer who builds and maintains cloud-based systems with a st
             </div>
         </section>
 
+        <section id="stats" class="scroll-reveal" style="--delay: 100ms;">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <p class="stat-num" id="stat-years">0+</p>
+                    <p class="stat-label">Years Experience</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-num" id="stat-project-count">0+</p>
+                    <p class="stat-label">Projects Completed</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-num">8</p>
+                    <p class="stat-label">Happy Clients</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-num">∞</p>
+                    <p class="stat-label">Cups of Coffee</p>
+                </div>
+            </div>
+        </section>
+
         <section id="projects">
             <div class="section-header scroll-reveal" style="--delay: 0ms;">
                 <h2 class="section-title">Selected Works</h2>
@@ -1198,8 +1282,8 @@ I am a software developer who builds and maintains cloud-based systems with a st
                             A simple Conversation is all you needed. I am open to discussing security auditing,
                             development, and new opportunities.
                         </p>
-                        <a href="/cdn-cgi/l/email-protection#a4c5d6c7d6cdc8c1d7d0e4cbd1d0c8cbcbcf8ac7cbc9" class="email-display">
-                            <span class="__cf_email__" data-cfemail="46273425342f2a233532062933322a29292d6825292b">[email&#160;protected]</span>
+                        <a href="mailto:arcrilest@outlook.com" class="email-display">
+                            arcrilest@outlook.com
                         </a>
                     </div>
                 </div>
@@ -1254,7 +1338,7 @@ I am a software developer who builds and maintains cloud-based systems with a st
     
     <div id="cursor-tooltip"></div>
 
-    <div class="modal-overlay" id="project-modal">
+    <div class="modal-overlay" id="project-modal" onclick="handleModalClick(event)">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="m-title" id="m-title">PROJECT TITLE</h2>
@@ -1307,8 +1391,7 @@ I am a software developer who builds and maintains cloud-based systems with a st
         <svg viewBox="0 0 24 24"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>
     </button>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // --- CIPHER ANIMATION LOGIC ---
+    <script>
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         function initCipherEffect(targetElement) {
@@ -1357,8 +1440,6 @@ I am a software developer who builds and maintains cloud-based systems with a st
         if(mainTitle) cipherObserver.observe(mainTitle);
         if(connectTitle) cipherObserver.observe(connectTitle);
 
-
-        // --- UTILS ---
         function smoothScrollTo(target, duration) {
             const targetEl = document.querySelector(target);
             if (!targetEl) return;
@@ -1406,34 +1487,37 @@ I am a software developer who builds and maintains cloud-based systems with a st
                 renderProjects();
                 renderTimeline(data.experience);
                 renderSkillsTicker(); 
+                renderStats();
             } catch (error) {
                 console.error(error);
                 document.getElementById('projects-grid').innerHTML = `<div style="color:#666;">Error loading projects.</div>`;
             }
         }
 
-        // --- SKILLS & TOOLTIP LOGIC ---
+        function renderStats() {
+            if (!projectsData || projectsData.length === 0) return;
+            
+            const uniqueYears = new Set();
+            projectsData.forEach(p => {
+                if(p.year) uniqueYears.add(p.year.toString());
+            });
+            
+            const statYears = document.getElementById('stat-years');
+            const statProjects = document.getElementById('stat-project-count');
+            
+            if (statYears) statYears.textContent = uniqueYears.size + '+';
+            if (statProjects) statProjects.textContent = projectsData.length + '+';
+        }
+
         const tooltip = document.getElementById('cursor-tooltip');
         
         const skillInfo = {
-            "PHP": {
-                usage: "Server-side web development"
-            },
-            "JAVA": {
-                usage: "Enterprise apps, Android development"
-            },
-            "SOLIDITY": {
-                usage: "Smart contracts on Ethereum"
-            },
-            "LARAVEL": {
-                usage: "Modern PHP web application framework"
-            },
-            "BASH": {
-                usage: "Command-line scripting & automation"
-            },
-            "PHYSICAL SECURITY": {
-                usage: "Access control, surveillance, risk management"
-            }
+            "PHP": { usage: "Server-side web development" },
+            "JAVA": { usage: "Enterprise apps, Android development" },
+            "SOLIDITY": { usage: "Smart contracts on Ethereum" },
+            "LARAVEL": { usage: "Modern PHP web application framework" },
+            "BASH": { usage: "Command-line scripting & automation" },
+            "PHYSICAL SECURITY": { usage: "Access control, surveillance, risk management" }
         };
 
         function renderSkillsTicker() {
@@ -1560,7 +1644,7 @@ I am a software developer who builds and maintains cloud-based systems with a st
                 linkEl.textContent = 'External Link';
                 linkEl.style.color = '#fff';
                 linkEl.style.textDecoration = 'underline';
-                linkEl.style.pointerEvents = 'auto';
+                linkEl.style.pointerEvents = '';
             }
 
             document.getElementById('m-desc').innerHTML = p.desc ? p.desc.map(d => `<p>${d}</p>`).join('') : '';
@@ -1584,7 +1668,15 @@ I am a software developer who builds and maintains cloud-based systems with a st
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
+
         function closeModal() { modal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+
+        function handleModalClick(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
         const lightbox = document.getElementById('lightbox-modal');
         function openLightbox(src) { document.getElementById('lightbox-img').src = src; lightbox.classList.add('active'); }
         function closeLightbox() { lightbox.classList.remove('active'); }
