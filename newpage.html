@@ -44,7 +44,7 @@
             overflow-x: hidden;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
-            padding-bottom: 40px; 
+            padding-bottom: 40px;
         }
 
         #canvas-container {
@@ -71,7 +71,7 @@
             opacity: 0;
             transform: translateY(40px);
             transition: opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1), transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
-            transition-delay: var(--delay, 0ms); 
+            transition-delay: var(--delay, 0ms);
             will-change: opacity, transform;
         }
 
@@ -127,15 +127,15 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            padding-top: 20vh;
-            padding-bottom: 5rem;
+            justify-content: center;
+            padding-top: 8vh;
+            padding-bottom: 4rem;
         }
 
         .about-wrapper {
             display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 6rem;
+            grid-template-columns: 1fr 1.8fr;
+            gap: 8rem;
             align-items: center;
         }
 
@@ -171,7 +171,7 @@
             margin: 0;
             letter-spacing: -0.03em;
             position: relative;
-            min-height: 1em; 
+            min-height: 1em;
         }
 
         .identity-col .subtitle {
@@ -215,10 +215,10 @@
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid var(--border);
             border-radius: var(--radius-main);
-            padding: 3rem;
+            padding: 2.5rem;
             width: 100%;
             height: auto;
-            margin-top: -4rem; 
+            margin-top: 0;
         }
 
         @media (max-width: 1024px) {
@@ -232,16 +232,16 @@
             text-transform: uppercase;
             letter-spacing: 0.15em;
             color: var(--text-muted);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--border);
             font-weight: 600;
         }
 
         .timeline-item {
-            padding-bottom: 2rem;
+            padding-bottom: 1.5rem;
             padding-left: 1.5rem;
-            border-left: 2px solid rgba(255, 255, 255, 0.15);
+            border-left: 2px solid transparent;
             position: relative;
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -249,7 +249,6 @@
         .timeline-item:last-child {
             padding-bottom: 0;
             border-left: 2px solid transparent;
-            border-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, transparent 100%) 1;
         }
 
         .timeline-item:hover {
@@ -259,7 +258,7 @@
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -5px; 
+            left: -1px;
             top: 6px;
             width: 8px;
             height: 8px;
@@ -268,6 +267,7 @@
             border-radius: 50%;
             transition: all 0.3s ease;
             z-index: 2;
+            transform: translateX(-50%);
         }
 
         .timeline-item:hover::before {
@@ -313,7 +313,7 @@
             text-transform: uppercase;
             margin-bottom: 0.75rem;
             padding: 2px 8px;
-            background: rgba(255,255,255,0.04);
+            background: rgba(255, 255, 255, 0.04);
             border-radius: 4px;
             display: inline-block;
         }
@@ -370,9 +370,11 @@
                 grid-template-columns: repeat(2, 1fr);
                 gap: 3rem 1rem;
             }
+
             .stat-item:nth-child(2) {
                 border-right: none;
             }
+
             .stat-item {
                 border-right: 1px solid var(--border);
             }
@@ -383,6 +385,7 @@
                 grid-template-columns: 1fr;
                 gap: 3rem;
             }
+
             .stat-item {
                 border-right: none;
             }
@@ -446,12 +449,12 @@
             inset: 0;
             background-size: cover;
             background-position: center;
-            opacity: 0.7; 
+            opacity: 0.7;
             transition: opacity 0.4s ease, transform 0.6s ease;
         }
 
         .faction-card:hover .faction-bg-img {
-            opacity: 1; 
+            opacity: 1;
             transform: scale(1.03);
         }
 
@@ -536,191 +539,20 @@
             margin-bottom: 2rem;
         }
 
-        .video-container {
+        .chart-wrapper {
             width: 100%;
-            aspect-ratio: 16 / 9;
-            background-color: #000;
+            aspect-ratio: 1 / 1;
+            background-color: rgba(10, 10, 10, 0.5);
             position: relative;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: var(--font-main);
-            clip-path: polygon(
-                0 0, 
-                calc(100% - 20px) 0, 
-                100% 20px, 
-                100% 100%, 
-                20px 100%, 
-                0 calc(100% - 20px)
-            );
-            border: 4px solid #333; 
-        }
-
-        .video-container:fullscreen {
-            clip-path: none;
-            border: none;
-        }
-
-        .video-container::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100px; height: 100px;
-            background: repeating-linear-gradient(
-                -45deg,
-                #111,
-                #111 5px,
-                #222 5px,
-                #222 10px
-            );
-            z-index: 1;
-            clip-path: polygon(0 0, 100% 0, 0 100%);
-            opacity: 0.5;
-        }
-
-        .contact-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            z-index: 2;
-        }
-
-        .big-play-btn {
-            position: absolute;
-            background: #fff;
-            color: #000;
-            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-            width: 70px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: none;
-            font-family: var(--font-main);
-            font-size: 1.5rem;
-            font-weight: 900;
-            cursor: pointer;
-            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.15s;
-            z-index: 10;
-        }
-
-        .big-play-btn::before {
-            content: "";
-            position: absolute;
-            inset: 2px;
-            background: #fff;
-            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-            z-index: -1;
-        }
-
-        .big-play-btn:hover {
-            transform: scale(1.1) skewX(-5deg);
-            background: #ccc;
-        }
-
-        .big-play-btn.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(0.5);
-        }
-
-        .custom-controls {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            width: calc(100% - 40px);
-            padding: 0.75rem 1rem;
-            background: rgba(10, 10, 10, 0.85);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 5;
-            backdrop-filter: blur(8px);
-            clip-path: polygon(
-                0 0, 
-                100% 0, 
-                100% calc(100% - 10px), 
-                calc(100% - 10px) 100%, 
-                0 100%
-            );
-            border-left: 4px solid #555;
-        }
-
-        .video-container:hover .custom-controls.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .ctrl-label {
-            font-size: 0.5rem;
-            color: #555;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            font-weight: 800;
-            margin-right: auto;
-            align-self: flex-start;
-            position: absolute;
-            top: 2px; left: 12px;
-        }
-
-        .ctrl-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            opacity: 0.7;
-            transition: opacity 0.2s, transform 0.1s;
-            margin-top: 8px;
-        }
-
-        .ctrl-btn:hover {
-            opacity: 1;
-            transform: skewX(-5deg);
-        }
-
-        .ctrl-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
-
-        .ctrl-time {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #fff;
-            min-width: 90px;
-            letter-spacing: 0.05em;
-            font-variant-numeric: tabular-nums; 
-            margin-top: 8px;
-        }
-
-        .ctrl-slider {
-            flex: 1;
-            -webkit-appearance: none;
-            appearance: none;
-            height: 6px;
-            background: #222;
-            outline: none;
-            cursor: pointer;
-            margin-top: 8px;
-            clip-path: polygon(0 0, 100% 0, calc(100% - 3px) 100%, 0 100%);
-        }
-
-        .ctrl-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 16px;
-            height: 12px;
-            background: #fff;
-            cursor: pointer;
-            transform: skewX(-15deg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-main);
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         footer {
@@ -826,8 +658,13 @@
         }
 
         @keyframes panDots {
-            from { background-position: 0 0; }
-            to { background-position: 0 -20px; }
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 0 -20px;
+            }
         }
 
         .gallery-grid {
@@ -914,7 +751,7 @@
             color: #999;
             line-height: 1.8;
             margin-bottom: 1rem;
-            word-wrap: break-word; 
+            word-wrap: break-word;
             white-space: normal;
             display: -webkit-box;
             -webkit-line-clamp: 8;
@@ -1004,13 +841,13 @@
         #skills-ticker {
             position: fixed;
             bottom: 0;
-            left: 0; 
-            width: 100%; 
-            height: 120px; 
-            z-index: 998; 
+            left: 0;
+            width: 100%;
+            height: 120px;
+            z-index: 998;
             font-family: var(--font-main);
             background: transparent;
-            pointer-events: none; 
+            pointer-events: none;
         }
 
         .ticker-wrap {
@@ -1020,32 +857,30 @@
             width: 100%;
             height: 35px;
             background: #050505;
-            border-top: 1px solid #333; 
+            border-top: 1px solid #333;
             border-bottom: none;
             pointer-events: auto;
             display: flex;
             align-items: center;
-            overflow: visible; 
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.9);
+            overflow: visible;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.9);
         }
 
         .skills-bump {
             position: absolute;
             bottom: 35px;
-            left: 0; 
-            background: #fff; 
+            left: 0;
+            background: #fff;
             color: #000;
             padding: 4px 18px;
             font-size: 0.75rem;
             font-weight: 800;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            clip-path: polygon(
-                0 0, 
-                calc(100% - 15px) 0, 
-                100% 100%, 
-                0 100%
-            );
+            clip-path: polygon(0 0,
+                    calc(100% - 15px) 0,
+                    100% 100%,
+                    0 100%);
             pointer-events: auto;
             z-index: 10;
         }
@@ -1067,7 +902,7 @@
             display: flex;
             align-items: center;
             width: max-content;
-            animation: scrollTicker 60s linear infinite; 
+            animation: scrollTicker 60s linear infinite;
         }
 
         .ticker-wrap:hover .ticker-track {
@@ -1075,8 +910,13 @@
         }
 
         @keyframes scrollTicker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
         }
 
         .ticker-item {
@@ -1084,8 +924,8 @@
             align-items: center;
             gap: 10px;
             padding: 0 2.5rem;
-            font-size: 0.7rem; 
-            font-weight: 500;  
+            font-size: 0.7rem;
+            font-weight: 500;
             color: #aaa;
             letter-spacing: 0.15em;
             text-transform: uppercase;
@@ -1093,13 +933,13 @@
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             z-index: 1;
-            white-space: nowrap; 
+            white-space: nowrap;
         }
-        
+
         .ticker-item::after {
             content: '';
             position: absolute;
-            bottom: -30px; 
+            bottom: -30px;
             left: 0;
             width: 100%;
             height: 30px;
@@ -1115,15 +955,15 @@
 
         .ticker-item:hover {
             color: #fff;
-            transform: scale(1.8) translateY(-15px); 
+            transform: scale(1.8) translateY(-15px);
             z-index: 100;
-            background: rgba(255, 255, 255, 0.1); 
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
             padding: 4px 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
         }
 
         .ticker-item:hover .ticker-icon {
@@ -1135,10 +975,10 @@
             background: rgba(10, 10, 10, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            color: #fff; 
+            color: #fff;
             padding: 8px 14px;
             border-radius: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.15); 
+            border: 1px solid rgba(255, 255, 255, 0.15);
             font-size: 0.75rem;
             font-weight: 500;
             line-height: 1.4;
@@ -1148,11 +988,11 @@
             opacity: 0;
             transform: translate(-50%, -100%);
             transition: opacity 0.15s ease, transform 0.15s;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             white-space: pre-line;
             text-align: left;
         }
-        
+
         #cursor-tooltip::after {
             content: '';
             position: absolute;
@@ -1179,10 +1019,10 @@
             align-items: center;
             cursor: pointer;
             z-index: 1000;
-            
-            transform: translateY(200px); 
+
+            transform: translateY(200px);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            
+
             backdrop-filter: blur(5px);
         }
 
@@ -1193,7 +1033,7 @@
         .scroll-top-btn:hover {
             background: #fff;
             color: #000;
-            transform: translateY(-5px); 
+            transform: translateY(-5px);
         }
 
         .scroll-top-btn svg {
@@ -1201,9 +1041,9 @@
             height: 20px;
             fill: currentColor;
         }
-
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -1227,7 +1067,11 @@
                     <p class="subtitle">A normal Programmer</p>
                     <div class="bio-text">
                         <p>
-I am a software developer who builds and maintains cloud-based systems with a strong focus on cybersecurity. I handle complete projects end‑to‑end, from writing application code and APIs to configuring servers and databases. I apply security best practices such as access control, encryption, and monitoring to protect data and prevent vulnerabilities. I also have experience integrating and securing IoT devices within these environments.
+                            I am a software developer who builds and maintains cloud-based systems with a strong focus
+                            on cybersecurity. I handle complete projects end‑to‑end, from writing application code and
+                            APIs to configuring servers and databases. I apply security best practices such as access
+                            control, encryption, and monitoring to protect data and prevent vulnerabilities. I also have
+                            experience integrating and securing IoT devices within these environments.
                         </p>
                     </div>
                     <a href="#projects" class="cta-btn">View my Projects</a>
@@ -1235,7 +1079,9 @@ I am a software developer who builds and maintains cloud-based systems with a st
 
                 <div class="timeline-container scroll-reveal" style="--delay: 200ms;">
                     <div class="timeline-header">Experience Timeline</div>
-                    <div id="timeline-list"><div style="color:#444; font-size:0.85rem;">Loading...</div></div>
+                    <div id="timeline-list">
+                        <div style="color:#444; font-size:0.85rem;">Loading...</div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1276,7 +1122,8 @@ I am a software developer who builds and maintains cloud-based systems with a st
                     <div>
                         <div class="section-head">
                             <div class="section-label">Contact</div>
-                            <h2 class="section-title-lg" id="connect-title" data-value="Let's Connect">Let's Connect</h2>
+                            <h2 class="section-title-lg" id="connect-title" data-value="Let's Connect">Let's Connect
+                            </h2>
                         </div>
                         <p style="color: var(--text-muted); margin-bottom: 2rem; font-size:1.1rem; max-width:400px;">
                             A simple Conversation is all you needed. I am open to discussing security auditing,
@@ -1288,37 +1135,8 @@ I am a software developer who builds and maintains cloud-based systems with a st
                     </div>
                 </div>
 
-                <div class="video-container scroll-reveal" style="--delay: 200ms;" id="vid-container">
-                    <video id="contact-video" class="contact-video" preload="metadata" playsinline>
-                        <source src="assets/contact-terminal.mp4" type="video/mp4">
-                    </video>
-
-                    <button class="big-play-btn" id="big-play-btn">
-                        &gt;
-                    </button>
-
-                    <div class="custom-controls" id="custom-controls">
-                        <span class="ctrl-label">SYS.CTRL</span>
-                        
-                        <button class="ctrl-btn" id="play-pause-btn">
-                            <svg id="ctrl-play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            <svg id="ctrl-pause-icon" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                        </button>
-                        
-                        <input type="range" class="ctrl-slider" id="progress-bar" value="0" min="0" max="100">
-                        
-                        <span class="ctrl-time" id="time-display">[ 0:00 / 0:00 ]</span>
-                        
-                        <button class="ctrl-btn" id="mute-btn">
-                            <svg id="vol-icon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-                            <svg id="mute-icon" viewBox="0 0 24 24" style="display:none;"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-                        </button>
-
-                        <button class="ctrl-btn" id="fullscreen-btn">
-                            <svg id="fs-expand-icon" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
-                            <svg id="fs-compress-icon" viewBox="0 0 24 24" style="display:none;"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
-                        </button>
-                    </div>
+                <div class="chart-wrapper scroll-reveal" style="--delay: 200ms;" id="skills-chart-container">
+                    <canvas id="skillsChart"></canvas>
                 </div>
             </div>
         </section>
@@ -1335,7 +1153,7 @@ I am a software developer who builds and maintains cloud-based systems with a st
             <div class="ticker-track" id="ticker-track"></div>
         </div>
     </div>
-    
+
     <div id="cursor-tooltip"></div>
 
     <div class="modal-overlay" id="project-modal" onclick="handleModalClick(event)">
@@ -1388,41 +1206,43 @@ I am a software developer who builds and maintains cloud-based systems with a st
     </div>
 
     <button id="scroll-to-top" class="scroll-top-btn">
-        <svg viewBox="0 0 24 24"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>
+        <svg viewBox="0 0 24 24">
+            <path d="M12 4l-8 8h6v8h4v-8h6z" />
+        </svg>
     </button>
 
     <script>
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         function initCipherEffect(targetElement) {
-            if(!targetElement) return;
-            
-            if(targetElement.dataset.cipherInterval) {
+            if (!targetElement) return;
+
+            if (targetElement.dataset.cipherInterval) {
                 clearInterval(parseInt(targetElement.dataset.cipherInterval));
             }
 
             let iteration = 0;
             const originalText = targetElement.dataset.value;
-            
+
             const interval = setInterval(() => {
                 targetElement.innerText = originalText
                     .split("")
                     .map((letter, index) => {
-                        if(index < iteration) {
+                        if (index < iteration) {
                             return originalText[index];
                         }
-                        if(originalText[index] === ' ') return ' ';
+                        if (originalText[index] === ' ') return ' ';
                         return letters[Math.floor(Math.random() * 26)];
                     })
                     .join("");
-                
-                if(iteration >= originalText.length) { 
+
+                if (iteration >= originalText.length) {
                     clearInterval(interval);
                 }
-                
+
                 iteration += 1 / 3;
             }, 30);
-            
+
             targetElement.dataset.cipherInterval = interval;
         }
 
@@ -1436,9 +1256,9 @@ I am a software developer who builds and maintains cloud-based systems with a st
 
         const mainTitle = document.getElementById('main-title');
         const connectTitle = document.getElementById('connect-title');
-        
-        if(mainTitle) cipherObserver.observe(mainTitle);
-        if(connectTitle) cipherObserver.observe(connectTitle);
+
+        if (mainTitle) cipherObserver.observe(mainTitle);
+        if (connectTitle) cipherObserver.observe(connectTitle);
 
         function smoothScrollTo(target, duration) {
             const targetEl = document.querySelector(target);
@@ -1482,12 +1302,13 @@ I am a software developer who builds and maintains cloud-based systems with a st
                 if (!response.ok) throw new Error("JSON Error");
                 const data = await response.json();
                 projectsData = data.projects;
-                skillsData = data.skills; 
+                skillsData = data.skills;
 
                 renderProjects();
                 renderTimeline(data.experience);
-                renderSkillsTicker(); 
+                renderSkillsTicker();
                 renderStats();
+                renderSkillsChart();
             } catch (error) {
                 console.error(error);
                 document.getElementById('projects-grid').innerHTML = `<div style="color:#666;">Error loading projects.</div>`;
@@ -1496,21 +1317,21 @@ I am a software developer who builds and maintains cloud-based systems with a st
 
         function renderStats() {
             if (!projectsData || projectsData.length === 0) return;
-            
+
             const uniqueYears = new Set();
             projectsData.forEach(p => {
-                if(p.year) uniqueYears.add(p.year.toString());
+                if (p.year) uniqueYears.add(p.year.toString());
             });
-            
+
             const statYears = document.getElementById('stat-years');
             const statProjects = document.getElementById('stat-project-count');
-            
+
             if (statYears) statYears.textContent = uniqueYears.size + '+';
             if (statProjects) statProjects.textContent = projectsData.length + '+';
         }
 
         const tooltip = document.getElementById('cursor-tooltip');
-        
+
         const skillInfo = {
             "PHP": { usage: "Server-side web development" },
             "JAVA": { usage: "Enterprise apps, Android development" },
@@ -1535,13 +1356,13 @@ I am a software developer who builds and maintains cloud-based systems with a st
                 </div>
             `).join('');
 
-            tickerTrack.innerHTML = skillsHTML + skillsHTML + skillsHTML; 
+            tickerTrack.innerHTML = skillsHTML + skillsHTML + skillsHTML;
 
             document.querySelectorAll('.ticker-item').forEach(item => {
                 item.addEventListener('mouseenter', (e) => {
                     const skillName = e.currentTarget.getAttribute('data-skill').toUpperCase();
                     const details = skillInfo[skillName] || { usage: "General Development" };
-                    
+
                     tooltip.innerHTML = `<strong>${skillName}</strong><br><span style="color:#aaa; font-size:0.7em;">USAGE: ${details.usage}</span>`;
                     tooltip.style.opacity = '1';
                     updateTooltipPos(e.currentTarget);
@@ -1556,7 +1377,7 @@ I am a software developer who builds and maintains cloud-based systems with a st
         function updateTooltipPos(targetItem) {
             const rect = targetItem.getBoundingClientRect();
             tooltip.style.left = (rect.left + rect.width / 2) + 'px';
-            tooltip.style.top = (rect.top - 25) + 'px'; 
+            tooltip.style.top = (rect.top - 25) + 'px';
         }
 
         function renderTimeline(experience) {
@@ -1712,9 +1533,9 @@ I am a software developer who builds and maintains cloud-based systems with a st
 
         function initObserver() {
             const fadeObserver = new IntersectionObserver((entries) => {
-                entries.forEach(e => { 
+                entries.forEach(e => {
                     if (e.isIntersecting) {
-                        e.target.classList.add('is-visible'); 
+                        e.target.classList.add('is-visible');
                     } else {
                         e.target.classList.remove('is-visible');
                     }
@@ -1738,107 +1559,59 @@ I am a software developer who builds and maintains cloud-based systems with a st
 
         fetchProjects();
 
-        const vidContainer = document.getElementById('vid-container');
-        const video = document.getElementById('contact-video');
-        const bigPlayBtn = document.getElementById('big-play-btn');
-        const customControls = document.getElementById('custom-controls');
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const playIcon = document.getElementById('ctrl-play-icon');
-        const pauseIcon = document.getElementById('ctrl-pause-icon');
-        const progressBar = document.getElementById('progress-bar');
-        const timeDisplay = document.getElementById('time-display');
-        const muteBtn = document.getElementById('mute-btn');
-        const volIcon = document.getElementById('vol-icon');
-        const muteIcon = document.getElementById('mute-icon');
-        const fullscreenBtn = document.getElementById('fullscreen-btn');
-        const fsExpandIcon = document.getElementById('fs-expand-icon');
-        const fsCompressIcon = document.getElementById('fs-compress-icon');
+        function renderSkillsChart() {
+            const ctx = document.getElementById('skillsChart').getContext('2d');
 
-        function formatTime(seconds) {
-            const min = Math.floor(seconds / 60);
-            const sec = Math.floor(seconds % 60);
-            return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+            const labels = ["Communication", "Problem Solving", "Adaptability", "Leadership", "Teamwork", "Time Management"];
+            const data = [95, 90, 85, 80, 90, 85];
+
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Project Usage',
+                        data: data,
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                        borderColor: 'rgba(255, 255, 255, 0.8)',
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#000',
+                        pointHoverBackgroundColor: '#000',
+                        pointHoverBorderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.2)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                            pointLabels: {
+                                color: '#ddd',
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 12,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: { display: false, min: 0, stepSize: 1 }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleFont: { family: "'Inter', sans-serif", size: 14 },
+                            bodyFont: { family: "'Inter', sans-serif", size: 14 },
+                            padding: 12,
+                            displayColors: false
+                        }
+                    }
+                }
+            });
         }
-
-        function togglePlay() {
-            if (video.paused) {
-                video.play();
-            } else {
-                video.pause();
-            }
-        }
-
-        function toggleMute() {
-            video.muted = !video.muted;
-            if (video.muted) {
-                volIcon.style.display = 'none';
-                muteIcon.style.display = 'block';
-            } else {
-                volIcon.style.display = 'block';
-                muteIcon.style.display = 'none';
-            }
-        }
-
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                vidContainer.requestFullscreen().catch(err => {
-                    console.error(`Error attempting to enable fullscreen: ${err.message}`);
-                });
-            } else {
-                document.exitFullscreen();
-            }
-        }
-
-        document.addEventListener('fullscreenchange', () => {
-            if (document.fullscreenElement) {
-                fsExpandIcon.style.display = 'none';
-                fsCompressIcon.style.display = 'block';
-            } else {
-                fsExpandIcon.style.display = 'block';
-                fsCompressIcon.style.display = 'none';
-            }
-        });
-
-        bigPlayBtn.addEventListener('click', togglePlay);
-        playPauseBtn.addEventListener('click', togglePlay);
-        muteBtn.addEventListener('click', toggleMute);
-        fullscreenBtn.addEventListener('click', toggleFullscreen);
-
-        video.addEventListener('play', () => {
-            bigPlayBtn.classList.add('hidden');
-            customControls.classList.add('active');
-            playIcon.style.display = 'none';
-            pauseIcon.style.display = 'block';
-        });
-
-        video.addEventListener('pause', () => {
-            bigPlayBtn.classList.remove('hidden');
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
-        });
-
-        video.addEventListener('timeupdate', () => {
-            const progress = (video.currentTime / video.duration) * 100;
-            progressBar.value = progress;
-            timeDisplay.textContent = `[ ${formatTime(video.currentTime)} / ${formatTime(video.duration)} ]`;
-        });
-
-        video.addEventListener('loadedmetadata', () => {
-            timeDisplay.textContent = `[ 0:00 / ${formatTime(video.duration)} ]`;
-        });
-
-        progressBar.addEventListener('input', () => {
-            const newTime = (progressBar.value / 100) * video.duration;
-            video.currentTime = newTime;
-        });
-
-        video.addEventListener('ended', () => {
-            bigPlayBtn.classList.remove('hidden');
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
-            progressBar.value = 0;
-            if (document.fullscreenElement) document.exitFullscreen();
-        });
 
         const scrollTopBtn = document.getElementById('scroll-to-top');
 
@@ -1859,4 +1632,5 @@ I am a software developer who builds and maintains cloud-based systems with a st
 
     </script>
 </body>
+
 </html>

@@ -255,35 +255,42 @@
 
   "experience": [
     {
-      "title": "Developer",
-      "company": "Sinarmas Agribusiness",
-      "period": "2024 - NOW",
+      "title": "Contract Software Engineer",
+      "company": "Sinar Mas Agribusiness and Food",
+      "period": "2025 - 2026",
       "location": "Jakarta, Indonesia",
-      "achievements": "Full-stack development and maintenance. Architected secure cloud-based systems and APIs while implementing strict access control and encryption standards to protect critical enterprise data."
+      "achievements": "Designed and developed secure integrations for seamless data exchange between internal systems and third-party platforms. Collaborated with cross-functional teams to optimize technical architecture and workflows."
+    },
+    {
+      "title": "Digital Delivery Intern",
+      "company": "Sinar Mas Agribusiness and Food",
+      "period": "2024 - 2025",
+      "location": "Jakarta, Indonesia",
+      "achievements": "Assisted in the deployment and testing of digital solutions to optimize agribusiness operations. Supported the digital delivery team in tracking project progress and resolving technical issues."
+    },
+    {
+      "title": "Informatics Laboratory Assistant",
+      "company": "Multimedia Nusantara University",
+      "period": "2021 - 2022",
+      "location": "Tangerang, Indonesia",
+      "achievements": "Prepared instructional materials for classes, delivered lectures, and provided assistance to students."
     },
     {
       "title": "Pentester",
-      "company": "Independent Contractor",
-      "period": "2020 - 2024",
+      "company": "Confidential (NDA Protected)",
+      "period": "2019 - 2023",
       "location": "Remote",
-      "achievements": "Vulnerability assessments and auditing. Conducted comprehensive penetration testing on web applications and network infrastructures to identify, document, and remediate critical security flaws."
-    },
-    {
-      "title": "Bug Hunting",
-      "company": "Bug Bounty Program",
-      "period": "2019 - 2020",
-      "location": "Remote",
-      "achievements": "Critical vulnerability identification. Participated in various bug bounty programs, successfully discovering and reporting high-severity vulnerabilities in enterprise platforms through advanced auditing techniques."
+      "achievements": "Conducted authorized penetration tests for multiple corporate clients across various industries, identifying critical digital and physical security vulnerabilities. Executed physical security assessments and hardened network infrastructure."
     }
   ]
 
 ,
   "skills": [
     { "category": "Technical Skill", 
-      "tech": "UNITY, ARDUINO, NETWORKING CONTROL, DIGITAL FORENSICS, DATA MANAGEMENT, PHYSICAL SECURITY, ACCESS CONTROL, SECURITY PROGRAM DEVELOPMENT" },
+      "tech": "AI & DATA, ARDUINO, NETWORKING CONTROL, DIGITAL FORENSICS, DATA MANAGEMENT, PHYSICAL SECURITY, ACCESS CONTROL, PENETRATION TESTING, VULNERABILITY ASSESSMENT, ENCRYPTION STANDARD, SECURITY PROGRAM DEVELOPMENT, DEVICE AND APP MANAGEMENT" },
     { "category": "Programming Language", 
-      "tech": "JAVASCRIPT, TYPESCRIPT, SQL, ASSEMBLY, C, C#, C++, PYTHON, VISUAL BASIC, PHP, BASH, JAVA, SOLIDITY" },
+      "tech": "C, C#, C++, VISUAL BASIC, BASH, JAVA, RUST, JAVASCRIPT, TYPESCRIPT, PYTHON, PHP, SQL, ASSEMBLY, SOLIDITY" },
     { "category": "Framework", 
-      "tech": "LARAVEL, CODE IGNITER, ANGULAR, REACTJS, ASP.NET" }
+      "tech": "FLUTTER, LARAVEL, CODE IGNITER, ANGULAR, REACTJS, ASP.NET, UNITY" }
   ]
 }
