@@ -134,9 +134,9 @@
 
         .about-wrapper {
             display: grid;
-            grid-template-columns: 1fr 1.8fr;
-            gap: 8rem;
-            align-items: center;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr);
+            gap: 4rem;
+            align-items: start;
         }
 
         .identity-col {
@@ -172,6 +172,7 @@
             letter-spacing: -0.03em;
             position: relative;
             min-height: 1em;
+            white-space: nowrap;
         }
 
         .identity-col .subtitle {
@@ -215,7 +216,7 @@
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid var(--border);
             border-radius: var(--radius-main);
-            padding: 2.5rem;
+            padding: 2rem;
             width: 100%;
             height: auto;
             margin-top: 0;
@@ -1562,8 +1563,11 @@
         function renderSkillsChart() {
             const ctx = document.getElementById('skillsChart').getContext('2d');
 
-            const labels = ["Communication", "Problem Solving", "Adaptability", "Leadership", "Teamwork", "Time Management"];
-            const data = [95, 90, 85, 80, 90, 85];
+            const labels = ["Cybersecurity", "Fullstack Programming", "Web3 Programming", "Mobile Programming", "Game Programming", "AI & Data"];
+
+            // Adjusted dynamically based on projects.json portfolio:
+            // 3 Cyber, 5 Fullstack, 1 Web3, 1-2 Mobile, 2 Game, 4 AI
+            const data = [85, 95, 75, 75, 80, 90];
 
             new Chart(ctx, {
                 type: 'radar',
